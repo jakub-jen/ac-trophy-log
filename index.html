@@ -1279,23 +1279,34 @@ document.getElementById("mklink").onclick = async () => {
   }
 };
 
-document.getElementById("exp").onclick = () => {
+document.getElementById("exp").onclick = async () => {
   const payload = { app: "ac-trophy-log", version: SYNC_V, saved: new Date().toISOString(), progress: {} };
   for (const g of GAMES) payload.progress[g.id] = [...done[g.id]];
   const json = JSON.stringify(payload, null, 2);
+  const filename = "ac-trofeje-" + new Date().toISOString().slice(0, 10) + ".json";
+
   if (IN_CLAUDE) {
-    note("Tady prohlížeč stahování nepustí — zkopíruj si zálohu odsud:");
+    // The viewer frame blocks plain download links; saving goes through the host.
+    try {
+      const dl = await window.claude.use("downloads");
+      if (dl) { await dl.save({ filename, data: json }); note("Záloha stažena."); return; }
+    } catch (err) {
+      if (err && err.code === "declined") { note("Stahování zrušeno."); return; }
+    }
+    note("Stahování se nepovedlo — zkopíruj si zálohu odsud:");
     showOut(json);
     return;
   }
+
   try {
     const a = document.createElement("a");
-    a.href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
-    a.download = "ac-trofeje-" + new Date().toISOString().slice(0, 10) + ".json";
+    const href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+    a.href = href;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
     a.remove();
-    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    setTimeout(() => URL.revokeObjectURL(href), 2000);
     note("Záloha stažena.");
   } catch (e) {
     note("Stahování se nepovedlo — zkopíruj si zálohu odsud:");
