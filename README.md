@@ -6,33 +6,58 @@ Odškrtávací seznam trofejí z Assassin's Creed na PS5. Jedna HTML stránka, �
 
 ## Co v tom je
 
-| Hra | Trofejí | Na platinu |
-|---|---:|---:|
-| Assassin's Creed Shadows (PS5) | 55 | 55 |
-| Assassin's Creed Mirage (PS5) | 51 | 51 |
-| Assassin's Creed Valhalla (PS5) | 87 | 51 |
-| Assassin's Creed Odyssey (PS4 na PS5) | 51 | 51 |
-| Assassin's Creed Origins (PS4 na PS5) | 59 | 51 |
-| **Celkem** | **303** | |
+| Hra | Rok | Trofejí | Na platinu |
+|---|---:|---:|---:|
+| Assassin's Creed Shadows (PS5) | 2025 | 55 | 55 |
+| Assassin's Creed Mirage (PS5) | 2023 | 51 | 51 |
+| Assassin's Creed Valhalla (PS5) | 2020 | 87 | 51 |
+| Assassin's Creed Odyssey | 2018 | 51 | 51 |
+| Assassin's Creed Origins | 2017 | 59 | 51 |
+| Assassin's Creed Syndicate | 2015 | 57 | 50 |
+| Assassin's Creed Unity | 2014 | 58 | 51 |
+| Assassin's Creed Rogue Remastered | 2014 | 47 | 47 |
+| Assassin's Creed IV: Black Flag | 2013 | 57 | 51 |
+| Assassin's Creed III Remastered | 2012 | 55 | 55 |
+| Assassin's Creed Revelations | 2011 | 50 | 50 |
+| Assassin's Creed Brotherhood | 2010 | 51 | 51 |
+| Assassin's Creed II | 2009 | 51 | 51 |
+| AC Chronicles: China | 2015 | 18 | bez platiny |
+| AC Chronicles: India | 2016 | 18 | bez platiny |
+| AC Chronicles: Russia | 2016 | 17 | bez platiny |
+| **Celkem** | | **782** | **13 platin** |
+
+Kromě tří posledních dílů jsou to verze pro PS4, které na PS5 běží přes zpětnou kompatibilitu.
+Assassin's Creed z roku 2007 v seznamu není — vyšel před zavedením trofejí a žádné nemá.
 
 Prstenec u každé hry počítá postup **k platině**, ne ke 100 %. U žádné z těch her se DLC do platiny nepočítá — u Valhally je to rozdíl 87 proti 51. DLC sekce jsou v seznamu označené zvlášť.
 
 Názvy a popisy jsou přeložené do češtiny. Je to vlastní překlad — Ubisoft trofeje do češtiny
 nelokalizuje, takže na PSN je uvidíš anglicky. Originální název proto zůstává pod tím českým:
-to je to, co hledáš v guidech a na YouTube. U 144 trofejí je navíc tip, co je pro ni potřeba
+to je to, co hledáš v guidech a na YouTube. U 255 trofejí je navíc tip, co je pro ni potřeba
 udělat; trofeje, které jdou nenávratně minout, jsou označené červeně.
+
+### Co hlídat
+
+Dvě platiny závisí na serverech, které Ubisoft může kdykoli vypnout:
+
+- **Unity** — šest trofejí vyžaduje co-op a servery jsou dlouhodobě nespolehlivé
+- **Black Flag** — pět trofejí je z multiplayeru, hráčů je minimum
+
+Verze z The Ezio Collection (AC II, Brotherhood, Revelations) multiplayerové trofeje **nemají**,
+takže tamní platiny jsou bezpečné, na rozdíl od původních PS3 verzí.
 
 ### Zatím chybí
 
 - Claws of Awaji (Shadows) — 11 trofejí
 - Legacy of the First Blade a Fate of Atlantis (Odyssey)
 - Curse of the Pharaohs (Origins)
+- Liberation Remastered — zdroje se rozcházely, radši nemám než špatně
 
 ## Jak se ukládá postup
 
 Postup se drží v `localStorage`, takže žije v tom prohlížeči, kde odškrtáváš. Na přenos jinam jsou dvě cesty:
 
-- **Sync odkaz** — zabalí celý postup do URL. 303 trofejí je bitová mapa o 38 bajtech, po zakódování 52 znaků. Pošleš si odkaz na mobil, otevřeš, postup naskočí. Pokud už na druhém zařízení něco odškrtnutého máš, stránka se nejdřív zeptá, než to přepíše.
+- **Sync odkaz** — zabalí celý postup do URL. 782 trofejí je bitová mapa o 98 bajtech, po zakódování 132 znaků. Pošleš si odkaz na mobil, otevřeš, postup naskočí. Pokud už na druhém zařízení něco odškrtnutého máš, stránka se nejdřív zeptá, než to přepíše.
 - **Záloha do souboru** — JSON ke stažení a načtení zpátky.
 
 Nic se nikam neposílá, žádný server, žádný účet.
