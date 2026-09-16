@@ -4,14 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="color-scheme" content="light dark">
-<meta name="description" content="Odškrtávací seznam trofejí z Assassin's Creed na PS5.">
+<meta name="description" content="Odškrtávací seznam trofejí na PS5.">
 <style>
   html { color-scheme: light dark; }
   body { margin: 0; }
   img { max-width: 100%; }
   [hidden] { display: none !important; }
 </style>
-<title>Animus Trophy Log</title>
+<title>Lovec platin</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bitter:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap">
 <style>
   :root {
@@ -713,7 +713,7 @@
   <header class="masthead">
     <div>
       <p class="eyebrow">Trophy hunt &middot; PlayStation 5</p>
-      <h1>Assassin&rsquo;s Creed</h1>
+      <h1>Lovec platin</h1>
     </div>
     <div class="tally" id="tally"></div>
   </header>
@@ -741,8 +741,9 @@
 
   <footer>
     <p class="sync" id="sync">Ukládám&hellip;</p>
-    <p>České názvy jsou vlastní překlad — Ubisoft trofeje do češtiny nelokalizuje, na PSN je uvidíš anglicky. Proto je originál vždycky pod názvem: to je to, co hledej v guidech a na YouTube. Seznamy podle PowerPyx a Fextralife.</p>
-    <p>Chybí: DLC Claws of Awaji (Shadows), DLC k Odyssey a Curse of the Pharaohs (Origins), a celé Liberation Remastered — u toho se mi zdroje rozcházely, tak ho radši nemám než špatně. Assassin&rsquo;s Creed z roku 2007 trofeje nemá vůbec, vyšel před jejich zavedením.</p>
+    <p>České názvy jsou vlastní překlad — trofeje se do češtiny nelokalizují, na PSN je uvidíš anglicky. Proto je originál vždycky pod názvem: to je to, co hledej v guidech a na YouTube.</p>
+    <p><strong>Assassin&rsquo;s Creed</strong> — seznamy podle PowerPyx a Fextralife. Chybí DLC Claws of Awaji (Shadows), DLC k Odyssey a Curse of the Pharaohs (Origins), a celé Liberation Remastered, u kterého se mi zdroje rozcházely. Díl z roku 2007 trofeje nemá vůbec, vyšel před jejich zavedením.</p>
+    <p>Další série přibývají na vyžádání — řekni si o hru a doplním ji i s českými popisy a tipy.</p>
   </footer>
 </div>
 
@@ -751,7 +752,7 @@
 // [grade, name, description]  ·  grade: P platinum, G gold, S silver, B bronze
 const GAMES = [
   {
-    id: "shadows", title: "Assassin's Creed Shadows", year: 2025, plat: "PS5",
+    id: "shadows", series: "Assassin\'s Creed", title: "Assassin's Creed Shadows", year: 2025, plat: "PS5",
     note: "Platina nevyžaduje žádné DLC — stačí 55 trofejí ze základní hry.",
     sets: [{ name: "Základní hra", platinum: true, t: [
       ["P","Assassin's Creed Shadows","Unlock every trophy"],
@@ -812,7 +813,7 @@ const GAMES = [
     ]}]
   },
   {
-    id: "mirage", title: "Assassin's Creed Mirage", year: 2023, plat: "PS5",
+    id: "mirage", series: "Assassin\'s Creed", title: "Assassin's Creed Mirage", year: 2023, plat: "PS5",
     note: "Nejrychlejší platina ze všech pěti — kolem 25 hodin. Jediná missable je Masquerader: obě přestrojení se dají získat jen během příběhu.",
     sets: [{ name: "Základní hra", platinum: true, t: [
       ["P","Master of His Fate","Earn all other trophies in Assassin's Creed Mirage to unlock Platinum"],
@@ -869,7 +870,7 @@ const GAMES = [
     ]}]
   },
   {
-    id: "valhalla", title: "Assassin's Creed Valhalla", year: 2020, plat: "PS5",
+    id: "valhalla", series: "Assassin\'s Creed", title: "Assassin's Creed Valhalla", year: 2020, plat: "PS5",
     note: "Zdaleka největší nářez — na platinu stačí 51 trofejí ze základní hry, ale se čtyřmi DLC je jich 87.",
     sets: [
       { name: "Základní hra", platinum: true, t: [
@@ -972,7 +973,7 @@ const GAMES = [
     ]
   },
   {
-    id: "odyssey", title: "Assassin's Creed Odyssey", year: 2018, plat: "PS4 na PS5",
+    id: "odyssey", series: "Assassin\'s Creed", title: "Assassin's Creed Odyssey", year: 2018, plat: "PS4 na PS5",
     note: "Verze pro PS4, na PS5 běží přes zpětnou kompatibilitu. Nejotravnější je The Cult Unmasked — všech 42 kultistů Kosmu.",
     sets: [{ name: "Základní hra", platinum: true, t: [
       ["P","Epic Cycle","Earn every trophy"],
@@ -1029,7 +1030,7 @@ const GAMES = [
     ]}]
   },
   {
-    id: "origins", title: "Assassin's Creed Origins", year: 2017, plat: "PS4 na PS5",
+    id: "origins", series: "Assassin\'s Creed", title: "Assassin's Creed Origins", year: 2017, plat: "PS4 na PS5",
     note: "Verze pro PS4. Platina nevyžaduje DLC — The Hidden Ones se počítá až do 100 %.",
     sets: [
       { name: "Základní hra", platinum: true, t: [
@@ -1098,7 +1099,7 @@ const GAMES = [
     ]
   },
   {
-    id: "syndicate", title: "Assassin's Creed Syndicate", year: 2015, plat: "PS4 na PS5",
+    id: "syndicate", series: "Assassin\'s Creed", title: "Assassin's Creed Syndicate", year: 2015, plat: "PS4 na PS5",
     note: "Celá platina je offline. Hraješ za dvojčata Jacoba a Evie — část trofejí je vázaná konkrétně na jednoho z nich.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1165,7 +1166,7 @@ const GAMES = [
     ]
   },
   {
-    id: "unity", title: "Assassin's Creed Unity", year: 2014, plat: "PS4 na PS5",
+    id: "unity", series: "Assassin\'s Creed", title: "Assassin's Creed Unity", year: 2014, plat: "PS4 na PS5",
     note: "Nejrizikovější platina ze všech. Šest trofejí vyžaduje kooperaci a servery Unity jsou dlouhodobě nespolehlivé — hráči hlásí, že se do co-opu nedostanou. Než se do platiny pustíš, ověř si, že ti co-op naskočí.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1233,7 +1234,7 @@ const GAMES = [
     ]
   },
   {
-    id: "rogue", title: "Assassin's Creed Rogue Remastered", year: 2014, plat: "PS4 remaster na PS5",
+    id: "rogue", series: "Assassin\'s Creed", title: "Assassin's Creed Rogue Remastered", year: 2014, plat: "PS4 remaster na PS5",
     note: "Hraješ za templáře, ne za asasína. Platina je celá offline a patří k těm přívětivějším v sérii.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1288,7 +1289,7 @@ const GAMES = [
     ]
   },
   {
-    id: "blackflag", title: "Assassin's Creed IV: Black Flag", year: 2013, plat: "PS4 na PS5",
+    id: "blackflag", series: "Assassin\'s Creed", title: "Assassin's Creed IV: Black Flag", year: 2013, plat: "PS4 na PS5",
     note: "Pozor na platinu: pět trofejí je z multiplayeru. Servery sice běží, ale hráčů je minimum a čekání na zápas může být dlouhé. Naplánuj si je dřív než zbytek.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1355,7 +1356,7 @@ const GAMES = [
     ]
   },
   {
-    id: "ac3", title: "Assassin's Creed III Remastered", year: 2012, plat: "PS4 remaster na PS5",
+    id: "ac3", series: "Assassin\'s Creed", title: "Assassin's Creed III Remastered", year: 2012, plat: "PS4 remaster na PS5",
     note: "Remaster bundluje DLC The Tyranny of King Washington a jeho trofeje se do platiny počítají — v seznamu je poznáš podle zkratky TOKW. Multiplayer z originálu v remasteru není, takže platina na serverech nezávisí.",
     sets: [
     { name: "Základní hra včetně TOKW", platinum: true, t: [
@@ -1418,7 +1419,7 @@ const GAMES = [
     ]
   },
   {
-    id: "revelations", title: "Assassin's Creed Revelations", year: 2011, plat: "PS4 na PS5",
+    id: "revelations", series: "Assassin\'s Creed", title: "Assassin's Creed Revelations", year: 2011, plat: "PS4 na PS5",
     note: "Z The Ezio Collection. Multiplayer je pryč, DLC The Lost Archive je naopak součástí hry a do platiny se počítá.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1476,7 +1477,7 @@ const GAMES = [
     ]
   },
   {
-    id: "brotherhood", title: "Assassin's Creed Brotherhood", year: 2010, plat: "PS4 na PS5",
+    id: "brotherhood", series: "Assassin\'s Creed", title: "Assassin's Creed Brotherhood", year: 2010, plat: "PS4 na PS5",
     note: "Z The Ezio Collection. Multiplayerové trofeje z původní PS3 verze tady nejsou, takže platina je celá offline a nezávisí na serverech.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1535,7 +1536,7 @@ const GAMES = [
     ]
   },
   {
-    id: "ac2", title: "Assassin's Creed II", year: 2009, plat: "PS4 na PS5",
+    id: "ac2", series: "Assassin\'s Creed", title: "Assassin's Creed II", year: 2009, plat: "PS4 na PS5",
     note: "Z The Ezio Collection. Verze pro PS4 nemá multiplayerové trofeje, takže platina je na rozdíl od původní PS3 verze pořád získatelná.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1594,7 +1595,7 @@ const GAMES = [
     ]
   },
   {
-    id: "chronicles-china", title: "Assassin's Creed Chronicles: China", year: 2015, plat: "PS4 na PS5",
+    id: "chronicles-china", series: "Assassin\'s Creed", title: "Assassin's Creed Chronicles: China", year: 2015, plat: "PS4 na PS5",
     note: "2.5D plošinovka, ne otevřený svět. Platina tu není — jde se rovnou na 100 %. Hraješ za Shao Jun, žačku Ezia.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1620,7 +1621,7 @@ const GAMES = [
     ]
   },
   {
-    id: "chronicles-india", title: "Assassin's Creed Chronicles: India", year: 2016, plat: "PS4 na PS5",
+    id: "chronicles-india", series: "Assassin\'s Creed", title: "Assassin's Creed Chronicles: India", year: 2016, plat: "PS4 na PS5",
     note: "Druhý díl 2.5D trilogie, bez platiny. Hraješ za Arbaaze Mira v Indii 19. století.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1646,7 +1647,7 @@ const GAMES = [
     ]
   },
   {
-    id: "chronicles-russia", title: "Assassin's Creed Chronicles: Russia", year: 2016, plat: "PS4 na PS5",
+    id: "chronicles-russia", series: "Assassin\'s Creed", title: "Assassin's Creed Chronicles: Russia", year: 2016, plat: "PS4 na PS5",
     note: "Závěr 2.5D trilogie, taky bez platiny. Rusko roku 1918, hraješ za Nikolaje Orelova.",
     sets: [
     { name: "Základní hra", platinum: true, t: [
@@ -1699,6 +1700,10 @@ for (const g of GAMES) {
   g.platSet = g.sets.find(s => s.platinum) || g.sets[0];
   g.hasDlc = g.sets.some(s => s.dlc);
   g.hasPlatinum = g.all.some(it => it.grade === "P");
+  const trimmed = g.title.startsWith(g.series)
+    ? g.title.slice(g.series.length).replace(/^[\s:–-]+/, "")
+    : g.title;
+  g.short = trimmed || g.title;
 }
 
 // Release order. Within a year: Unity and Rogue shipped the same day (Unity first),
@@ -1905,7 +1910,7 @@ function railBtn(g) {
   const platted = d === t && g.hasPlatinum;
   return '<button class="gamebtn" type="button" data-game="' + g.id + '" aria-current="' + (g.id === state.gameId) + '">' +
     '<span class="g-name">' + (g.id === state.pinned ? PIN_ICON : "") +
-      esc(g.title.replace("Assassin's Creed ", "")) + "</span>" +
+      esc(g.short) + "</span>" +
     '<span class="bar' + (platted ? " is-plat" : "") + '"><i style="width:' + pct(d, t) + '%"></i></span>' +
     '<span class="g-meta"><span>' + g.year + "</span><span>" + (platted ? "Platina" : d + "/" + t) + "</span></span>" +
     "</button>";
@@ -1913,10 +1918,21 @@ function railBtn(g) {
 
 function renderRail() {
   const pinned = GAMES.find(g => g.id === state.pinned);
-  let h = "";
-  if (pinned) h += '<p class="rail-head">Právě hraju</p>' + railBtn(pinned);
-  h += '<p class="rail-head' + (pinned ? " sep" : "") + '">' + (pinned ? "Ostatní hry" : "Hry") + "</p>";
-  for (const g of GAMES) if (g.id !== state.pinned) h += railBtn(g);
+  let h = "", first = true;
+  if (pinned) { h += '<p class="rail-head">Právě hraju</p>' + railBtn(pinned); first = false; }
+  // Series keep the order they first appear in GAMES.
+  const bySeries = [];
+  for (const g of GAMES) {
+    if (g.id === state.pinned) continue;
+    let group = bySeries.find(s => s.name === g.series);
+    if (!group) bySeries.push(group = { name: g.series, games: [] });
+    group.games.push(g);
+  }
+  for (const group of bySeries) {
+    h += '<p class="rail-head' + (first ? "" : " sep") + '">' + esc(group.name) + "</p>";
+    first = false;
+    for (const g of group.games) h += railBtn(g);
+  }
   document.getElementById("rail").innerHTML = h;
 }
 

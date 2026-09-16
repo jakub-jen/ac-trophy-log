@@ -1,10 +1,15 @@
-# Animus Trophy Log
+# Lovec platin
 
-Odškrtávací seznam trofejí z Assassin's Creed na PS5. Jedna HTML stránka, žádný build, žádné závislosti.
+Odškrtávací seznam trofejí na PS5. Jedna HTML stránka, žádný build, žádné závislosti.
+
+Hry jsou seskupené podle série. Zatím je tu jedna — Assassin's Creed — a další přibývají
+na vyžádání: seznamy se dohledávají ručně ze dvou zdrojů a doplňují se české názvy, popisy
+a tipy. Automatický import z PSN by šel, ale potřeboval by vlastní server a NPSSO token,
+a hlavně by přinesl hry bez té české vrstvy, kvůli které to celé má smysl.
 
 **Živá verze:** https://jakub-jen.github.io/ac-trophy-log/
 
-## Co v tom je
+## Assassin's Creed
 
 | Hra | Rok | Trofejí | Na platinu |
 |---|---:|---:|---:|
