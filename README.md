@@ -34,6 +34,10 @@ a hlavně by přinesl hry bez té české vrstvy, kvůli které to celé má smy
 Kromě tří posledních dílů jsou to verze pro PS4, které na PS5 běží přes zpětnou kompatibilitu.
 Assassin's Creed z roku 2007 v seznamu není — vyšel před zavedením trofejí a žádné nemá.
 
+Sérii jde v seznamu sbalit kliknutím na její název — hlavička si i zabalená drží souhrn
+odškrtaných trofejí za celou sérii. Na mobilu, kde je seznam vodorovný pruh bez hlaviček,
+se sbalení ignoruje.
+
 Hry jsou seřazené chronologicky od nejstaršího dílu. Jednu hru si můžeš připnout tlačítkem
 **Připnout** v její hlavičce — vyskočí nad ostatní do sekce „Právě hraju“ a stránka se na ní
 příště rovnou otevře. Připnutí se drží stejně jako postup, takže platí i na druhém zařízení.

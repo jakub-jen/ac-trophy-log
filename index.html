@@ -261,6 +261,32 @@
   .pin-i { width: 11px; height: 11px; flex: none; }
   .g-name .pin-i { margin-right: 5px; color: var(--accent); vertical-align: -1px; }
   .rail-head.sep { padding-top: 18px; }
+  .series-head {
+    appearance: none;
+    background: none;
+    border: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    cursor: pointer;
+    text-align: left;
+  }
+  .series-head:hover { color: var(--ink); }
+  .series-head:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: var(--r-sm); }
+  .sh-chev { width: 13px; height: 13px; flex: none; transition: transform .15s ease; }
+  .sh-chev svg { width: 13px; height: 13px; display: block; }
+  .series-head[aria-expanded="false"] .sh-chev { transform: rotate(-90deg); }
+  .sh-count {
+    margin-left: auto;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0;
+    color: var(--ink-3);
+  }
+
+  /* display:contents keeps the buttons as direct flex items of the rail */
+  .series-games { display: contents; }
+  .series-games.is-shut { display: none; }
 
   .gamehead h2 {
     font-family: var(--disp);
@@ -617,6 +643,7 @@
       scrollbar-width: thin;
     }
     .rail-head { display: none; }
+    .series-games.is-shut { display: contents; }
     .gamebtn {
       width: auto;
       flex: 0 0 auto;
@@ -1719,6 +1746,7 @@ const done = {};
 for (const g of GAMES) done[g.id] = new Set();
 
 const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned: null, sinkDone: true };
+const collapsed = new Set();     // series folded shut in the rail
 const openRows = new Set();      // trophy ids expanded right now
 const aiAnswers = new Map();     // "gameId/trophyId" -> answer, kept across re-renders
 const aiBusy = new Set();
@@ -1734,6 +1762,7 @@ const LS_KEY = "ac-trophy-log-v1";
 const LS_PIN = "ac-trophy-log-pin-v1";
 const LS_AI  = "ac-trophy-log-answers-v1";
 const LS_SINK = "ac-trophy-log-sink-v1";
+const LS_FOLD = "ac-trophy-log-folded-v1";
 let pinTimer, pinChain;
 let answersUnsub = null, answersFor = null;
 let db = null;
@@ -1749,6 +1778,7 @@ function readLocal() {
     const pin = localStorage.getItem(LS_PIN);
     if (pin && GAMES.some(g => g.id === pin)) state.pinned = pin;
     state.sinkDone = localStorage.getItem(LS_SINK) !== "0";
+    for (const name of JSON.parse(localStorage.getItem(LS_FOLD) || "[]")) collapsed.add(name);
   } catch (e) { /* same */ }
   try {
     const saved = JSON.parse(localStorage.getItem(LS_AI) || "{}");
@@ -1823,16 +1853,19 @@ function watchAnswers(gameId) {
   } catch (e) { /* never break the page over saved answers */ }
 }
 
-function persistPin() {
+function persistSettings() {
   try {
     localStorage.setItem(LS_PIN, state.pinned || "");
     localStorage.setItem(LS_SINK, state.sinkDone ? "1" : "0");
+    localStorage.setItem(LS_FOLD, JSON.stringify([...collapsed]));
   } catch (e) { /* blocked storage */ }
   if (!db) return;
   clearTimeout(pinTimer);
   pinTimer = setTimeout(() => {
     pinChain = (pinChain || Promise.resolve())
-      .then(() => db.doc("settings/main").set({ pinned: state.pinned || "", sinkDone: state.sinkDone }))
+      .then(() => db.doc("settings/main").set({
+        pinned: state.pinned || "", sinkDone: state.sinkDone, collapsed: [...collapsed]
+      }))
       .catch(() => { /* local copy still applies */ });
   }, 300);
 }
@@ -1856,17 +1889,22 @@ async function initCloud() {
   setSync("cloud");
   try {
     db.doc("settings/main").onSnapshot(snap => {
-      if (!snap.exists) { if (state.pinned) persistPin(); return; }
+      if (!snap.exists) { if (state.pinned) persistSettings(); return; }
       const data = snap.data() || {};
       const pin = data.pinned || null;
       const valid = pin && GAMES.some(g => g.id === pin) ? pin : null;
       const sink = data.sinkDone !== false;
-      if (valid === state.pinned && sink === state.sinkDone) return;
+      const folds = Array.isArray(data.collapsed) ? data.collapsed : [];
+      const sameFolds = folds.length === collapsed.size && folds.every(f => collapsed.has(f));
+      if (valid === state.pinned && sink === state.sinkDone && sameFolds) return;
       state.pinned = valid;
       state.sinkDone = sink;
+      collapsed.clear();
+      for (const f of folds) collapsed.add(f);
       try {
         localStorage.setItem(LS_PIN, valid || "");
         localStorage.setItem(LS_SINK, sink ? "1" : "0");
+        localStorage.setItem(LS_FOLD, JSON.stringify(folds));
       } catch (e) { /* blocked */ }
       render();
     }, () => { /* pin stays local */ });
@@ -1929,9 +1967,23 @@ function renderRail() {
     group.games.push(g);
   }
   for (const group of bySeries) {
-    h += '<p class="rail-head' + (first ? "" : " sep") + '">' + esc(group.name) + "</p>";
+    const shut = collapsed.has(group.name);
+    // Count the whole series, not just what this group lists — a pinned game is
+    // pulled out above but still belongs to its series.
+    const inSeries = GAMES.filter(g => g.series === group.name);
+    const d = inSeries.reduce((sum, g) => sum + doneIn(g, g.all), 0);
+    const t = inSeries.reduce((sum, g) => sum + g.all.length, 0);
+    const slug = group.name.replace(/[^a-z0-9]+/gi, "-").toLowerCase();
+    h += '<button class="rail-head series-head' + (first ? "" : " sep") + '" type="button" ' +
+      'data-series="' + esc(group.name) + '" aria-expanded="' + !shut + '" aria-controls="ser-' + slug + '">' +
+      '<span class="sh-chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" ' +
+        'stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span>' +
+      "<span>" + esc(group.name) + "</span>" +
+      '<span class="sh-count">' + d + "/" + t + "</span></button>";
     first = false;
+    h += '<div class="series-games' + (shut ? " is-shut" : "") + '" id="ser-' + slug + '">';
     for (const g of group.games) h += railBtn(g);
+    h += "</div>";
   }
   document.getElementById("rail").innerHTML = h;
 }
@@ -2164,14 +2216,23 @@ document.addEventListener("click", e => {
 
   if (e.target.closest("#pin")) {
     state.pinned = state.pinned === state.gameId ? null : state.gameId;
-    persistPin();
+    persistSettings();
     render();
+    return;
+  }
+
+  const sh = e.target.closest("[data-series]");
+  if (sh) {
+    const name = sh.dataset.series;
+    if (collapsed.has(name)) collapsed.delete(name); else collapsed.add(name);
+    persistSettings();
+    renderRail();
     return;
   }
 
   if (e.target.closest("#sink")) {
     state.sinkDone = !state.sinkDone;
-    persistPin();
+    persistSettings();
     renderMain();
     return;
   }
@@ -2369,7 +2430,7 @@ document.getElementById("imp").onchange = e => {
         restored++;
       }
     }
-    if (data.pinned && GAMES.some(g => g.id === data.pinned)) { state.pinned = data.pinned; persistPin(); }
+    if (data.pinned && GAMES.some(g => g.id === data.pinned)) { state.pinned = data.pinned; persistSettings(); }
     applyMap(map);
     note("Načteno " + totalDone(map) + " odškrtnutých trofejí" +
          (restored ? " a " + restored + " uložených odpovědí" : "") + " ze zálohy.");
