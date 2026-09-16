@@ -486,9 +486,19 @@
     color: var(--ink-3);
     margin-bottom: 5px;
   }
+  .ai-acts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+  .ai-err { margin-top: 10px !important; color: var(--danger) !important; }
+  .ai-note {
+    margin-top: 8px !important;
+    font-family: var(--cond);
+    font-size: var(--fs-xs) !important;
+    color: var(--ink-3) !important;
+    letter-spacing: .02em;
+  }
+  .ai-btn.is-quiet { color: var(--ink-3); }
+  .ai-btn.is-quiet:hover { color: var(--danger); border-color: var(--danger); }
   .ai-btn {
     appearance: none;
-    margin-top: 12px;
     background: transparent;
     border: 1px solid var(--line);
     border-radius: var(--r-sm);
@@ -1682,6 +1692,7 @@ const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned
 const openRows = new Set();      // trophy ids expanded right now
 const aiAnswers = new Map();     // "gameId/trophyId" -> answer, kept across re-renders
 const aiBusy = new Set();
+const aiErrors = new Map();  // transient, never saved
 let sampler = null, aiReady = false;
 const game = () => GAMES.find(g => g.id === state.gameId);
 
@@ -1691,7 +1702,9 @@ const doneIn = (g, items) => items.reduce((n, it) => n + (done[g.id].has(it.id) 
 // ---- storage ---------------------------------------------------------------
 const LS_KEY = "ac-trophy-log-v1";
 const LS_PIN = "ac-trophy-log-pin-v1";
+const LS_AI  = "ac-trophy-log-answers-v1";
 let pinTimer, pinChain;
+let answersUnsub = null, answersFor = null;
 let db = null;
 const timers = {};
 const chains = {};
@@ -1704,6 +1717,11 @@ function readLocal() {
   try {
     const pin = localStorage.getItem(LS_PIN);
     if (pin && GAMES.some(g => g.id === pin)) state.pinned = pin;
+  } catch (e) { /* same */ }
+  try {
+    const saved = JSON.parse(localStorage.getItem(LS_AI) || "{}");
+    for (const gid of Object.keys(saved))
+      for (const tid of Object.keys(saved[gid] || {})) aiAnswers.set(gid + "/" + tid, saved[gid][tid]);
   } catch (e) { /* same */ }
 }
 function writeLocal() {
@@ -1719,6 +1737,58 @@ function setSync(kind) {
   if (kind === "cloud") el.innerHTML = "<i>&#9679;</i> Postup se ukládá k tvému účtu — na mobilu uvidíš to samé";
   else if (kind === "local") el.innerHTML = "<i>&#9679;</i> Postup se ukládá jen v tomhle prohlížeči";
   else el.textContent = "Ukládám…";
+}
+
+function writeLocalAi() {
+  try {
+    const out = {};
+    for (const [key, text] of aiAnswers) {
+      const cut = key.indexOf("/");
+      (out[key.slice(0, cut)] = out[key.slice(0, cut)] || {})[key.slice(cut + 1)] = text;
+    }
+    localStorage.setItem(LS_AI, JSON.stringify(out));
+  } catch (e) { /* quota or blocked storage; the cloud copy still applies */ }
+}
+
+// One small document per answer, so saving one never rewrites the rest.
+function answerRef(gameId, trophyId) {
+  return db.doc("tips/" + gameId).collection("answers").doc(trophyId);
+}
+
+function persistAnswer(gameId, trophyId, text) {
+  writeLocalAi();
+  if (!db) return;
+  const op = text
+    ? answerRef(gameId, trophyId).set({ text, at: new Date().toISOString() })
+    : answerRef(gameId, trophyId).delete();
+  op.catch(() => { /* local copy stands; asking again will retry */ });
+}
+
+function watchAnswers(gameId) {
+  if (!db || answersFor === gameId) return;
+  if (answersUnsub) { answersUnsub(); answersUnsub = null; }
+  answersFor = gameId;
+  try {
+    answersUnsub = db.doc("tips/" + gameId).collection("answers").onSnapshot(snap => {
+      let changed = false;
+      const seen = new Set();
+      for (const doc of snap.docs) {
+        const text = (doc.data() || {}).text;
+        if (typeof text !== "string" || !text) continue;
+        seen.add(doc.id);
+        const key = gameId + "/" + doc.id;
+        if (aiAnswers.get(key) !== text) { aiAnswers.set(key, text); changed = true; }
+      }
+      for (const key of [...aiAnswers.keys()]) {
+        if (!key.startsWith(gameId + "/")) continue;
+        const tid = key.slice(gameId.length + 1);
+        if (!seen.has(tid) && !aiBusy.has(tid)) { aiAnswers.delete(key); changed = true; }
+      }
+      if (!changed) return;
+      writeLocalAi();
+      render();
+    }, () => { /* answers stay local */ });
+  } catch (e) { /* never break the page over saved answers */ }
 }
 
 function persistPin() {
@@ -1760,6 +1830,7 @@ async function initCloud() {
       render();
     }, () => { /* pin stays local */ });
   } catch (e) { /* never break the page over a pin */ }
+  watchAnswers(state.gameId);
   for (const g of GAMES) {
     try {
       db.doc("progress/" + g.id).onSnapshot(snap => {
@@ -1868,11 +1939,21 @@ function detailHtml(it, open) {
   let h = '<div class="detail" id="d-' + it.id + '"' + (open ? "" : " hidden") + ">";
   h += '<p class="d-head">Jak na to</p>';
   h += "<p>" + (it.tip ? esc(it.tip) : "Tuhle trofej popisuje samotné zadání — nic navíc k ní nemám.") + "</p>";
-  if (aiReady) {
-    h += '<button class="ai-btn" type="button" data-ask="' + it.id + '"' + (busy ? " disabled" : "") + ">" +
-      (busy ? "Ptám se…" : answer ? "Zeptat se znovu" : "Zeptat se Claudea") + "</button>";
+  const err = aiErrors.get(key);
+  if (aiReady || answer) {
+    h += '<div class="ai-acts">';
+    if (aiReady) {
+      h += '<button class="ai-btn" type="button" data-ask="' + it.id + '"' + (busy ? " disabled" : "") + ">" +
+        (busy ? "Ptám se…" : answer ? "Zeptat se znovu" : "Zeptat se Claudea") + "</button>";
+    }
+    if (answer && !busy) {
+      h += '<button class="ai-btn is-quiet" type="button" data-forget="' + it.id + '">Smazat odpověď</button>';
+    }
+    h += "</div>";
+    if (err) h += '<p class="ai-err">' + esc(err) + "</p>";
     h += '<div class="ai-out" id="ai-' + it.id + '"' + (answer || busy ? "" : " hidden") + ">" +
       esc(answer || "") + "</div>";
+    if (answer && !busy) h += '<p class="ai-note">Odpověď je uložená — najdeš ji tu i příště.</p>';
   }
   return h + "</div>";
 }
@@ -1947,6 +2028,7 @@ async function askClaude(it) {
   const g = game();
   aiBusy.add(it.id);
   aiAnswers.delete(key);
+  aiErrors.delete(key);
   render();
 
   const paint = text => {
@@ -1966,12 +2048,16 @@ async function askClaude(it) {
   try {
     const res = await sampler(prompt, { modelTier: "default", cache: true, onText: t => paint(t.text) });
     paint(res.text);
+    aiBusy.delete(it.id);
+    persistAnswer(state.gameId, it.id, res.text);
   } catch (err) {
     const code = err && err.code;
-    if (code === "not_granted") { aiReady = false; }
-    else if (code === "rate_limited") paint("Moc dotazů za sebou — zkus to za chvíli znovu.");
-    else if (err && err.text) paint(err.text);
-    else paint("Nepovedlo se zeptat. Zkus to prosím znovu.");
+    if (code === "not_granted") aiReady = false;
+    else if (code === "rate_limited") aiErrors.set(key, "Moc dotazů za sebou — zkus to za chvíli znovu.");
+    else aiErrors.set(key, "Nepovedlo se zeptat. Zkus to prosím znovu.");
+    // A partial answer is not worth keeping, so it is dropped rather than saved.
+    aiAnswers.delete(key);
+    aiBusy.delete(it.id);
   } finally {
     aiBusy.delete(it.id);
     render();
@@ -1981,7 +2067,7 @@ async function askClaude(it) {
 // ---- events ----------------------------------------------------------------
 document.addEventListener("click", e => {
   const gb = e.target.closest(".gamebtn");
-  if (gb) { state.gameId = gb.dataset.game; state.q = ""; openRows.clear(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  if (gb) { state.gameId = gb.dataset.game; state.q = ""; openRows.clear(); watchAnswers(state.gameId); render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
 
   const box = e.target.closest("[data-toggle]");
   if (box) {
@@ -1996,6 +2082,16 @@ document.addEventListener("click", e => {
   if (ask) {
     const it = game().all.find(t => t.id === ask.dataset.ask);
     if (it) askClaude(it);
+    return;
+  }
+
+  const forget = e.target.closest("[data-forget]");
+  if (forget) {
+    const id = forget.dataset.forget;
+    aiAnswers.delete(state.gameId + "/" + id);
+    aiErrors.delete(state.gameId + "/" + id);
+    persistAnswer(state.gameId, id, "");
+    render();
     return;
   }
 
@@ -2145,8 +2241,13 @@ document.getElementById("mklink").onclick = async () => {
 };
 
 document.getElementById("exp").onclick = async () => {
-  const payload = { app: "ac-trophy-log", version: SYNC_V, saved: new Date().toISOString(), progress: {} };
+  const payload = { app: "ac-trophy-log", version: SYNC_V, saved: new Date().toISOString(),
+                    progress: {}, answers: {}, pinned: state.pinned || "" };
   for (const g of GAMES) payload.progress[g.id] = [...done[g.id]];
+  for (const [key, text] of aiAnswers) {
+    const cut = key.indexOf("/");
+    (payload.answers[key.slice(0, cut)] = payload.answers[key.slice(0, cut)] || {})[key.slice(cut + 1)] = text;
+  }
   const json = JSON.stringify(payload, null, 2);
   const filename = "ac-trofeje-" + new Date().toISOString().slice(0, 10) + ".json";
 
@@ -2189,12 +2290,23 @@ document.getElementById("imp").onchange = e => {
     try { data = JSON.parse(r.result); } catch (err) { note("Ten soubor není platná záloha."); return; }
     if (!data || !data.progress) { note("V souboru není žádný postup."); return; }
     const map = {};
+    let restored = 0;
     for (const g of GAMES) {
       const valid = new Set(g.all.map(t => t.id));
       map[g.id] = new Set((data.progress[g.id] || []).filter(id => valid.has(id)));
+
+      const saved = (data.answers || {})[g.id] || {};
+      for (const tid of Object.keys(saved)) {
+        if (!valid.has(tid) || typeof saved[tid] !== "string" || !saved[tid]) continue;
+        aiAnswers.set(g.id + "/" + tid, saved[tid]);
+        persistAnswer(g.id, tid, saved[tid]);
+        restored++;
+      }
     }
+    if (data.pinned && GAMES.some(g => g.id === data.pinned)) { state.pinned = data.pinned; persistPin(); }
     applyMap(map);
-    note("Načteno " + totalDone(map) + " odškrtnutých trofejí ze zálohy.");
+    note("Načteno " + totalDone(map) + " odškrtnutých trofejí" +
+         (restored ? " a " + restored + " uložených odpovědí" : "") + " ze zálohy.");
   };
   r.onerror = () => note("Soubor se nepodařilo přečíst.");
   r.readAsText(file);
@@ -2202,8 +2314,8 @@ document.getElementById("imp").onchange = e => {
 
 if (!IN_CLAUDE) document.body.classList.add("standalone");
 document.getElementById("tf-intro").textContent = IN_CLAUDE
-  ? "Tady se postup ukládá k tvému účtu sám. Záloha do souboru je navíc, když si ho chceš odnést jinam."
-  : "Postup žije v tomhle prohlížeči. Sync odkaz si ho zabalí do URL (52 znaků) — pošli si ho na mobil a otevři. Záloha do souboru je na delší uchování.";
+  ? "Postup, připnutá hra i uložené odpovědi se tu drží u tvého účtu samy. Záloha do souboru je navíc, když si to chceš odnést jinam."
+  : "Postup i uložené odpovědi žijí v tomhle prohlížeči. Sync odkaz přenese odškrtané trofeje (zabalí je do URL), odpovědi na trofeje unese jedině záloha do souboru.";
 
 // ---- boot ------------------------------------------------------------------
 readLocal();

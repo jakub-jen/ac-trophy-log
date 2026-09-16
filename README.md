@@ -43,7 +43,9 @@ Trofeje, které jdou nenávratně minout, mají u názvu červený štítek **mi
 
 Ve verzi na claude.ai je v tom panelu navíc tlačítko **Zeptat se Claudea**, které se doptá
 přímo na konkrétní trofej. Na GitHub Pages se nezobrazuje — to API existuje jen uvnitř
-claude.ai. Odpovědi se drží jen do zavření stránky.
+claude.ai. Vyžádané odpovědi se ukládají a zůstávají u trofeje i po zavření stránky;
+každá má u sebe tlačítko **Smazat odpověď**. Nepovedený dotaz se neukládá, aby se
+useknutá odpověď netvářila jako platná.
 
 ### Co hlídat
 
@@ -67,7 +69,8 @@ takže tamní platiny jsou bezpečné, na rozdíl od původních PS3 verzí.
 Postup se drží v `localStorage`, takže žije v tom prohlížeči, kde odškrtáváš. Na přenos jinam jsou dvě cesty:
 
 - **Sync odkaz** — zabalí celý postup do URL. 782 trofejí je bitová mapa o 98 bajtech, po zakódování 132 znaků. Pošleš si odkaz na mobil, otevřeš, postup naskočí. Pokud už na druhém zařízení něco odškrtnutého máš, stránka se nejdřív zeptá, než to přepíše.
-- **Záloha do souboru** — JSON ke stažení a načtení zpátky.
+- **Záloha do souboru** — JSON ke stažení a načtení zpátky. Nese i uložené odpovědi
+  a připnutou hru, na rozdíl od sync odkazu, do kterého se vejdou jen odškrtané trofeje.
 
 Nic se nikam neposílá, žádný server, žádný účet.
 
