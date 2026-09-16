@@ -1,0 +1,1339 @@
+<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta name="description" content="Odškrtávací seznam trofejí z Assassin's Creed na PS5.">
+<style>
+  html { color-scheme: light dark; }
+  body { margin: 0; }
+  img { max-width: 100%; }
+  [hidden] { display: none !important; }
+</style>
+<title>Animus Trophy Log</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Barlow:ital,wght@0,400;0,500;0,600;1,400&family=Barlow+Condensed:wght@500;600&display=swap">
+<style>
+  :root {
+    --bg:        #E6E9EE;
+    --surface:   #FFFFFF;
+    --surface-2: #F1F4F8;
+    --surface-3: #E2E7EE;
+    --ink:       #111820;
+    --ink-2:     #59646F;
+    --ink-3:     #8A94A0;
+    --line:      #CBD3DC;
+    --line-soft: #DCE2EA;
+    --accent:    #1F4C7A;
+    --accent-ink:#FFFFFF;
+    --danger:    #9B3A34;
+
+    --bronze-a:#E09A63; --bronze-b:#A85A2C;
+    --silver-a:#D3DAE3; --silver-b:#8996A6;
+    --gold-a:  #F2CC6B; --gold-b:  #BE8B1F;
+    --plat-a:  #CFE6F7; --plat-b:  #5E9BCC;
+
+    --r-sm: 3px;
+    --r-md: 6px;
+
+    --fs-xs: 11px;
+    --fs-sm: 13px;
+    --fs-md: 15px;
+    --fs-lg: 19px;
+    --fs-xl: 27px;
+    --fs-2xl: 40px;
+
+    --sans: "Barlow", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --cond: "Barlow Condensed", "Barlow", ui-sans-serif, system-ui, sans-serif;
+    --disp: "Cinzel", "Iowan Old Style", Georgia, "Times New Roman", serif;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg:        #0B0F14;
+      --surface:   #131A22;
+      --surface-2: #19212B;
+      --surface-3: #212B37;
+      --ink:       #E6ECF3;
+      --ink-2:     #97A4B2;
+      --ink-3:     #6B7786;
+      --line:      #28323F;
+      --line-soft: #1F2833;
+      --accent:    #7FB2E8;
+      --accent-ink:#0B0F14;
+      --danger:    #D98078;
+      --silver-a:#E2E8F0; --silver-b:#7C8A9B;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg:        #0B0F14;
+    --surface:   #131A22;
+    --surface-2: #19212B;
+    --surface-3: #212B37;
+    --ink:       #E6ECF3;
+    --ink-2:     #97A4B2;
+    --ink-3:     #6B7786;
+    --line:      #28323F;
+    --line-soft: #1F2833;
+    --accent:    #7FB2E8;
+    --accent-ink:#0B0F14;
+    --danger:    #D98078;
+    --silver-a:#E2E8F0; --silver-b:#7C8A9B;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: var(--fs-md);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 28px 64px;
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 4px;
+  }
+  h1 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: var(--fs-xl);
+    letter-spacing: .01em;
+    line-height: 1.1;
+    margin: 0;
+    text-wrap: balance;
+  }
+  .tally {
+    display: flex;
+    gap: 18px;
+    align-items: baseline;
+    font-variant-numeric: tabular-nums;
+  }
+  .tally div { text-align: right; }
+  .tally .num {
+    font-family: var(--cond);
+    font-size: var(--fs-lg);
+    font-weight: 600;
+    display: block;
+    line-height: 1.1;
+  }
+  .tally .cap {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+
+  /* ---------- layout ---------- */
+  .layout {
+    display: grid;
+    grid-template-columns: 252px minmax(0, 1fr);
+    gap: 32px;
+    margin-top: 28px;
+    align-items: start;
+  }
+
+  /* ---------- game rail ---------- */
+  .rail { display: flex; flex-direction: column; gap: 2px; }
+  .rail-head {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .16em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 0 0 8px 12px;
+  }
+  .gamebtn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    border-left: 2px solid transparent;
+    text-align: left;
+    padding: 10px 12px;
+    cursor: pointer;
+    color: var(--ink-2);
+    font-family: inherit;
+    display: grid;
+    gap: 6px;
+    width: 100%;
+  }
+  .gamebtn:hover { background: var(--surface-2); color: var(--ink); }
+  .gamebtn[aria-current="true"] {
+    background: var(--surface);
+    border-left-color: var(--accent);
+    color: var(--ink);
+  }
+  .gamebtn .g-name {
+    font-family: var(--disp);
+    font-size: var(--fs-sm);
+    font-weight: 500;
+    letter-spacing: .01em;
+    line-height: 1.25;
+  }
+  .gamebtn .g-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .bar {
+    height: 3px;
+    background: var(--surface-3);
+    overflow: hidden;
+  }
+  .bar > i { display: block; height: 100%; background: var(--accent); }
+  .bar.is-plat > i { background: linear-gradient(90deg, var(--plat-b), var(--plat-a)); }
+
+  /* ---------- game header ---------- */
+  .gamehead {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+    align-items: center;
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    padding: 22px 24px;
+  }
+  .gamehead h2 {
+    font-family: var(--disp);
+    font-weight: 700;
+    font-size: var(--fs-lg);
+    margin: 0 0 6px;
+    line-height: 1.2;
+    text-wrap: balance;
+  }
+  .gamehead .sub {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .gh-text { flex: 1 1 260px; min-width: 0; }
+  .gh-note {
+    margin: 12px 0 0;
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+    max-width: 52ch;
+  }
+  .ring-wrap { display: flex; gap: 22px; align-items: center; flex: 0 0 auto; }
+  .ring { width: 104px; height: 104px; display: block; }
+  .ring .track { stroke: var(--surface-3); }
+  .ring .fill { stroke: url(#platgrad); stroke-linecap: butt; transition: stroke-dashoffset .35s ease; }
+  .ring text { fill: var(--ink); font-family: var(--cond); font-weight: 600; }
+  .ring .pct { font-size: 21px; }
+  .ring .lbl { font-size: 8.5px; fill: var(--ink-3); letter-spacing: .14em; }
+
+  .metals { display: grid; gap: 7px; }
+  .metal {
+    display: grid;
+    grid-template-columns: 14px 1fr auto;
+    align-items: center;
+    gap: 9px;
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .metal b { color: var(--ink); font-weight: 600; }
+
+  .pip {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1px rgba(0,0,0,.18);
+  }
+  .pip.b { background: linear-gradient(145deg, var(--bronze-a), var(--bronze-b)); }
+  .pip.s { background: linear-gradient(145deg, var(--silver-a), var(--silver-b)); }
+  .pip.g { background: linear-gradient(145deg, var(--gold-a), var(--gold-b)); }
+  .pip.p { background: linear-gradient(145deg, var(--plat-a), var(--plat-b)); }
+
+  /* ---------- controls ---------- */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+    margin: 20px 0 4px;
+  }
+  .search {
+    flex: 1 1 200px;
+    min-width: 140px;
+    font-family: inherit;
+    font-size: var(--fs-sm);
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 8px 11px;
+    border-radius: var(--r-sm);
+  }
+  .search::placeholder { color: var(--ink-3); }
+  .search:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+
+  .seg { display: flex; border: 1px solid var(--line); border-radius: var(--r-sm); overflow: hidden; }
+  .seg button {
+    appearance: none;
+    border: 0;
+    background: var(--surface);
+    color: var(--ink-2);
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-right: 1px solid var(--line);
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -3px; }
+
+  .ghost {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    color: var(--ink-2);
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+  .ghost:hover { color: var(--danger); border-color: var(--danger); }
+
+  /* ---------- trophy sets ---------- */
+  .set { margin-top: 26px; }
+  .set-head {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--line);
+  }
+  .set-head h3 {
+    font-family: var(--cond);
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  .set-head .flag {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border: 1px solid var(--line);
+    padding: 1px 6px;
+  }
+  .set-head .count {
+    margin-left: auto;
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: .06em;
+  }
+
+  .row {
+    display: grid;
+    grid-template-columns: 22px 12px minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    padding: 11px 10px 11px 4px;
+    border-bottom: 1px solid var(--line-soft);
+    cursor: pointer;
+    background: none;
+    border-left: 0; border-right: 0; border-top: 0;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    color: inherit;
+  }
+  .row:hover { background: var(--surface-2); }
+  .row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .row .pip { margin-top: 5px; }
+
+  .box {
+    width: 20px; height: 20px;
+    margin-top: 1px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .box svg { width: 13px; height: 13px; opacity: 0; transform: scale(.7); transition: opacity .12s, transform .12s; }
+  .row[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+  .row[aria-pressed="true"] .box svg { opacity: 1; transform: scale(1); stroke: var(--accent-ink); }
+  .row[aria-pressed="true"] .t-name { color: var(--ink-2); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .row[aria-pressed="true"] .pip { filter: saturate(.25); opacity: .55; }
+  .row[aria-pressed="true"] .t-desc { color: var(--ink-3); }
+
+  .t-name { font-weight: 600; font-size: var(--fs-md); line-height: 1.35; }
+  .t-desc { color: var(--ink-2); font-size: var(--fs-sm); line-height: 1.45; margin-top: 1px; }
+
+  .empty {
+    padding: 30px 4px;
+    color: var(--ink-3);
+    font-style: italic;
+    font-size: var(--fs-sm);
+  }
+
+  /* ---------- footer ---------- */
+  footer {
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--ink-3);
+    font-size: var(--fs-sm);
+    display: grid;
+    gap: 6px;
+  }
+  footer a { color: var(--ink-2); }
+  .sync {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+  }
+  .sync i { font-style: normal; color: var(--accent); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; animation: none !important; }
+  }
+
+  @media (max-width: 860px) {
+    .layout { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+    .rail {
+      flex-direction: row;
+      gap: 0;
+      overflow-x: auto;
+      border-bottom: 1px solid var(--line);
+      scrollbar-width: thin;
+    }
+    .rail-head { display: none; }
+    .gamebtn {
+      width: auto;
+      flex: 0 0 auto;
+      min-width: 150px;
+      border-left: 0;
+      border-bottom: 2px solid transparent;
+    }
+    .gamebtn[aria-current="true"] { border-bottom-color: var(--accent); background: var(--surface-2); }
+    .ring-wrap { gap: 18px; }
+  }
+
+  @media (max-width: 520px) {
+    .wrap { padding-inline: 16px; }
+    h1 { font-size: 22px; }
+    .gamehead { padding: 18px 16px; gap: 20px; }
+    .row { grid-template-columns: 20px 10px minmax(0, 1fr); gap: 10px; }
+  }
+  /* ---------- transfer / banner ---------- */
+  .banner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 16px;
+    margin-top: 18px;
+    padding: 13px 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    font-size: var(--fs-sm);
+  }
+  .banner p { margin: 0; flex: 1 1 240px; }
+  .banner .b-acts { display: flex; gap: 8px; }
+
+  .transfer {
+    margin-top: 44px;
+    padding: 20px 22px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+  }
+  .transfer h4 {
+    font-family: var(--cond);
+    font-size: var(--fs-md);
+    font-weight: 600;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    margin: 0 0 6px;
+  }
+  .transfer > p {
+    margin: 0 0 14px;
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+    max-width: 62ch;
+  }
+  .tf-acts { display: flex; flex-wrap: wrap; gap: 8px; }
+  .tf-acts .ghost:hover { color: var(--accent); border-color: var(--accent); }
+  label.ghost { display: inline-block; }
+  .tf-note {
+    margin: 12px 0 0;
+    font-size: var(--fs-sm);
+    color: var(--ink-2);
+    min-height: 1.4em;
+  }
+  .tf-out {
+    display: block;
+    width: 100%;
+    margin-top: 12px;
+    font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    padding: 9px 11px;
+    resize: vertical;
+    word-break: break-all;
+  }
+  .hide-in-claude { display: none; }
+  body.standalone .hide-in-claude { display: inline-block; }
+
+</style>
+</head>
+<body>
+<svg width="0" height="0" aria-hidden="true" style="position:absolute">
+  <defs>
+    <linearGradient id="platgrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="var(--plat-a)"/>
+      <stop offset="100%" stop-color="var(--plat-b)"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">Trophy hunt &middot; PlayStation 5</p>
+      <h1>Assassin&rsquo;s Creed</h1>
+    </div>
+    <div class="tally" id="tally"></div>
+  </header>
+
+  <div class="banner" id="banner" hidden></div>
+
+  <div class="layout">
+    <nav class="rail" id="rail" aria-label="Hry"></nav>
+    <main id="main"></main>
+  </div>
+
+
+  <section class="transfer">
+    <h4>Přenos postupu</h4>
+    <p id="tf-intro"></p>
+    <div class="tf-acts">
+      <button class="ghost hide-in-claude" type="button" id="mklink">Zkopírovat sync odkaz</button>
+      <button class="ghost" type="button" id="exp">Záloha do souboru</button>
+      <label class="ghost" for="imp">Načíst zálohu</label>
+      <input type="file" id="imp" accept="application/json,.json" hidden>
+    </div>
+    <p class="tf-note" id="tfnote"></p>
+    <textarea class="tf-out" id="tfout" rows="4" readonly hidden aria-label="Data k ručnímu zkopírování"></textarea>
+  </section>
+
+  <footer>
+    <p class="sync" id="sync">Ukládám&hellip;</p>
+    <p>Názvy a popisy trofejí jsou v originále, tak jak je najdeš na PSN a v guidech. Seznamy podle PowerPyx a Fextralife.</p>
+    <p>Zatím chybí: DLC Claws of Awaji (Shadows), DLC k Odyssey a Curse of the Pharaohs (Origins). Řekni si a doplním je.</p>
+  </footer>
+</div>
+
+<script>
+// ---- trophy data -----------------------------------------------------------
+// [grade, name, description]  ·  grade: P platinum, G gold, S silver, B bronze
+const GAMES = [
+  {
+    id: "shadows", title: "Assassin's Creed Shadows", year: 2025, plat: "PS5",
+    note: "Platina nevyžaduje žádné DLC — stačí 55 trofejí ze základní hry.",
+    sets: [{ name: "Základní hra", platinum: true, t: [
+      ["P","Assassin's Creed Shadows","Unlock every trophy"],
+      ["B","Prologue","Complete the Prologue"],
+      ["B","A New League Rises","Complete Act 1 of the main story"],
+      ["B","An Oath Fulfilled","Complete Act 2 of the main story"],
+      ["B","Fall of the Shinbakufu","Complete Act 3 of the main story"],
+      ["G","Epilogue","Complete the Epilogue"],
+      ["S","Death Blossom","Defeated all Shinbakufu"],
+      ["B","The Thief","Meet Gennojo"],
+      ["B","The Toxin Master","Meet Oni-yuri"],
+      ["B","The Eager Assassin","Meet Yagoro"],
+      ["B","The Ronin","Meet Ibuki"],
+      ["B","The Warrior Monk","Meet Yaya"],
+      ["B","The Sharpshooter","Meet Katsuhime"],
+      ["B","Build Your League","Recruit your first ally"],
+      ["B","Front of the Pack","Fully train an ally"],
+      ["B","Art of Ninjutsu","Master the way of the shinobi"],
+      ["B","Art of Kenjutsu","Master the way of the samurai"],
+      ["B","Make It Personal","Engrave your first weapon"],
+      ["B","Better Than a Bucket","Equip legendary gear in all slots"],
+      ["S","Limitless","Find a legendary piece of gear of each type"],
+      ["S","In Case of Trouble","Fully upgrade your tools and ammunition"],
+      ["B","Suture Self","Fully upgrade your rations"],
+      ["B","Sometimes","Perform a landing roll"],
+      ["B","Reeding Is Fundamental","Escape conflict by using a breathing reed to hide in shallow water"],
+      ["B","Just Your Shadow","Distract the same enemy 3 times with shinobi bells"],
+      ["B","Hook, Line, and Swinger","Stay airborne by swinging from one grappling hook point to another"],
+      ["B","Acrobatics","Perform a Leap of Faith from a grappling hook swing"],
+      ["B","Leap of Fail","Perform a leap of faith as Yasuke"],
+      ["B","Adept Shinobi","Perform your first assassination"],
+      ["B","Master Shinobi","Assassinate an enemy through a shoji door"],
+      ["S","Unseen","Perform 5 assassinations in a row without being noticed or entering combat"],
+      ["B","Giant Slayer","Assassinate a powerful guardian in one go"],
+      ["B","Adept Samurai","Perform your first Finisher as Yasuke"],
+      ["B","Master Samurai","Parry an incoming projectile"],
+      ["S","Unstoppable","Use Samurai Stand before performing a Finisher on an enemy"],
+      ["B","This Is Japan, Actually","Kick an enemy from a high place"],
+      ["B","Overdesign III","Perform a Finisher on an enemy that is both Poisoned and Dazed"],
+      ["B","Final Hearing","Sheath your weapon immediately after an enemy dies from Bleed"],
+      ["B","Adventurer","Shoot an enemy in the knee with an arrow"],
+      ["S","Mortal Reminder","Complete an Objective Board"],
+      ["S","Test Your Might","Defeat the final enemy in the tournament"],
+      ["B","Kofun Raider","Complete your first kofun"],
+      ["B","Good Form","Complete your first kata"],
+      ["S","Zen Master","Complete all kuji-kiri"],
+      ["S","A Rare Occurrence","Complete all legendary sumi-e"],
+      ["S","Collector","Complete a collection"],
+      ["B","Sole Sanctum","Unlock the Hideout"],
+      ["B","Chase the Morning","Add a sumi-e to the Hideout"],
+      ["B","Against Wood and Stone","Fully upgrade a building in the Hideout"],
+      ["B","Everybody Benefits!","Adopt a pet"],
+      ["B","Happy Place","Reach the highest point on the map"],
+      ["B","Pathfinder","Visit every province on the map"],
+      ["B","Scouting Mission","Gather information using a scout"],
+      ["B","Would You Kindly?","Complete a contract in each province"],
+      ["S","Made You Look!","Look for treasure behind the waterfall in the Hideout"]
+    ]}]
+  },
+  {
+    id: "mirage", title: "Assassin's Creed Mirage", year: 2023, plat: "PS5",
+    note: "Nejrychlejší platina ze všech pěti — kolem 25 hodin. Jediná missable je Masquerader: obě přestrojení se dají získat jen během příběhu.",
+    sets: [{ name: "Základní hra", platinum: true, t: [
+      ["P","Master of His Fate","Earn all other trophies in Assassin's Creed Mirage to unlock Platinum"],
+      ["G","Bal kullun mumkin","Discover Basim's past"],
+      ["S","La shay'a waqi'un mutlaq","Become an Initiate of the Hidden Ones"],
+      ["S","The Blood of a Ghoul","Eliminate Al-Ghul"],
+      ["S","The Blood of a Spymaster","Eliminate Al-Mardikhwar"],
+      ["S","The Head of the Snake","Eliminate the Head of the Order"],
+      ["S","Self-Improvement","Unlock all skills"],
+      ["S","Fearless","Synchronize all viewpoints"],
+      ["S","Defender of the People","Complete 10 faction contracts"],
+      ["S","Tools of the Trade","Fully upgrade all tools"],
+      ["S","Eagle's Eye","Kill 75 guards with throwing knives"],
+      ["S","The Hands of a Thief","Pickpocket 50 people"],
+      ["S","Curio Collector","Pickpocket all 18 artifacts and bring them to Dervis"],
+      ["S","Notorious","Stay at maximum notoriety for 10 minutes"],
+      ["S","Unstoppable","Kill 5 guards with one use of Assassin's Focus"],
+      ["S","Eagle's Will","Survive 10 minutes in open conflict"],
+      ["S","Gifted Escapist","Collapse 20 scaffolding structures"],
+      ["B","The Master Thief of Anbar","Complete the Prologue"],
+      ["B","The Blood of a Demon","Eliminate Al-Rabisu"],
+      ["B","The Blood of an Enchantress","Eliminate Al-Pairika"],
+      ["B","Serving the Light","Reach the maximum Hidden One Rank"],
+      ["B","Cutting Edge","Fully upgrade a weapon"],
+      ["B","Thick Skin","Fully upgrade an outfit"],
+      ["B","Fashion Statement","Apply dye to an outfit"],
+      ["B","Masquerader","Obtain both disguises"],
+      ["B","Treasure Seeker","Open a token chest"],
+      ["B","Potion Collector","Obtain a total of 10 elixirs"],
+      ["B","Bird of Prey","Tag 100 guards using Enkidu"],
+      ["B","Explorer","Fully explore all territories"],
+      ["B","Crossing Paths","Complete a Tale from Baghdad"],
+      ["B","Scholar","Bring all 7 lost books to Al-Jahiz"],
+      ["B","Riddle Me This","Obtain a treasure by solving an enigma"],
+      ["B","Headhunter","Headshot 20 guards with throwing knives"],
+      ["B","Sleep Tight","Put 10 guards to sleep with blowdarts"],
+      ["B","Ambush","Have 10 guards trigger traps"],
+      ["B","Up in Smoke","Affect 20 guards with smoke bombs"],
+      ["B","Attention Seeker","Distract 10 guards with noisemakers"],
+      ["B","You Snooze, You Lose","Pickpocket a guard affected by a blowdart"],
+      ["B","Hoarder","Save up 2007 dirhams"],
+      ["B","Dawn and Dusk","Use benches to pass time 5 times"],
+      ["B","Patron of the Arts","Pay musicians 5 times"],
+      ["B","Patron of Sell-Swords","Pay mercenaries 5 times"],
+      ["B","Patron of Industry","Pay merchant groups 5 times"],
+      ["B","Blade in the Crowd","Assassinate 10 guards while blending with the crowd"],
+      ["B","Surprise!","Assassinate 10 guards from hiding spots"],
+      ["B","The Shadow and the Flame","Defeat a Shakiriyya in combat"],
+      ["B","Silencer","Destroy a Horn Bearer's horn with a throwing knife"],
+      ["B","Poster Boy","At maximum notoriety, become anonymous by tearing down wanted posters"],
+      ["B","Spread the News","Use the services of a Munadi 3 times"],
+      ["B","A True Hidden One","Assassinate 10 guards in a row without triggering open conflict"],
+      ["B","Street Cleaner","Hide 5 bodies in bales of hay"]
+    ]}]
+  },
+  {
+    id: "valhalla", title: "Assassin's Creed Valhalla", year: 2020, plat: "PS5",
+    note: "Zdaleka největší nářez — na platinu stačí 51 trofejí ze základní hry, ale se čtyřmi DLC je jich 87.",
+    sets: [
+      { name: "Základní hra", platinum: true, t: [
+        ["P","Viking Legend","Win Every Trophy"],
+        ["B","The Saga Begins","Complete the Prologue"],
+        ["B","To England!","Leave Norway"],
+        ["B","Hard Choices","Complete the Grantebridgescire Arc"],
+        ["B","The Order is Revealed","Complete the Lunden Arc"],
+        ["B","The Good Saxon","Complete the East Anglia Arc"],
+        ["B","Take My Hand","Complete the Cent Arc"],
+        ["B","Calling in a Favor","Complete the Suthsexe Arc"],
+        ["B","The Enemy of My Enemy","Complete the Wincestre Arc"],
+        ["S","In the Footsteps of the Gods","Complete the Asgard and Jotunheim quests"],
+        ["S","As It Was Foretold","Complete \"The Prophecy\" storyline"],
+        ["S","England Subdued","Complete Hamtunscire Arc"],
+        ["G","Discorder of the Ancients","Eliminate all targets of the Order of Ancients"],
+        ["B","Rampage","Complete your first raid in England"],
+        ["B","It's Alive!","Create a Jomsviking"],
+        ["B","Tranquility","Complete a Standing Stone puzzle"],
+        ["B","Equilibrium","Complete 3 Cairn challenges"],
+        ["B","Old School Treasure Hunt","Collect 5 Treasure Hoard rewards"],
+        ["B","Skadi's Hobby","Perform a 150 slide in the snow"],
+        ["B","Witch Hunter","Defeat one Daughter of Lerion"],
+        ["B","Equine Attack","Assassinate an enemy from your horse"],
+        ["B","Silent Viking","Assassinate 10 enemies in a row without triggering a conflict"],
+        ["B","Everyday Life","Complete 10 World Events"],
+        ["S","Overdesign II","While on fire during a fight, kill 3 hard difficulty soldiers without breaking their shields"],
+        ["S","Completionist All the Way!","Complete all territories"],
+        ["B","Row Rage","Ram and destroy 5 boats in under 2 minutes with your longship"],
+        ["S","We're in the End Game Now","Reach Power 280"],
+        ["B","A Picture of Grace","Run through 30 breakable objects"],
+        ["B","Builder","Reach settlement level 3"],
+        ["S","Home Sweet Home","Reach settlement level 6"],
+        ["B","Pioneer","Reach Vinland"],
+        ["B","Home Decor","Place an item on each settlement cosmetic spot"],
+        ["B","Not the Norse You're Looking For","Successfully pass close to a guard in a distrust area by blending with a group of monks"],
+        ["B","Face My Might!","Equip 8 abilities"],
+        ["S","Ultimate Refinement","Fully upgrade and enhance a piece of gear"],
+        ["B","Flying Eivor","Get thrown 30 meters away by a destroyer or a housecarl"],
+        ["B","Twinkle Twinkle","Release a firefly in your settlement"],
+        ["B","Archaeologist","Complete all Roman collector challenges"],
+        ["B","Orlog Champion","Beat all the Orlog players"],
+        ["B","Good Catch!","Catch a fish of each type using the fishing line"],
+        ["S","Full Mastery","Spend your first Mastery point"],
+        ["B","Is There Anybody Out There?","Light the unlit braziers on Hadrian's Wall"],
+        ["S","Slam Master","Complete all the flytings"],
+        ["S","Caladflch","Draw Excalibur from the Stone"],
+        ["B","It's Not a Bug, It's a Feature!","Complete your first Animus Anomaly"],
+        ["B","Seahorse","Swim a total of 3km with the horse"],
+        ["S","The Hidden Truth","Obtain all video fragments and watch the hidden truth video"],
+        ["S","Master Hunter","Defeat all Alpha animals"],
+        ["B","Dreamcatcher","Destroy 10 Curse Symbols"],
+        ["S","Godly Reward","Obtain Thor's Helmet"],
+        ["B","Worthy","Wield Mjolnir"]
+      ]},
+      { name: "Wrath of the Druids", dlc: true, t: [
+        ["S","Irish Legend","Complete all territories of Ireland"],
+        ["B","Ireland's Deliverance","Complete the Wrath of the Druids campaign"],
+        ["B","Dawn of the Druids","Collect all the amber shards for Deirdre"],
+        ["B","Like a Druid","Complete a Trial of the Morrigan"],
+        ["B","All Roads Lead to Dublin","Reach the max level of Dublin Renown"],
+        ["B","The Legend of St. Patrick","Kill the only snake in Ireland"],
+        ["B","King's Maker","Complete 10 Royal Demands"],
+        ["B","Double Trouble","Equip a Sickle in both hands"],
+        ["B","Decked Out","Find the full Dublin Champion armor set"]
+      ]},
+      { name: "The Siege of Paris", dlc: true, t: [
+        ["S","Do What Is Right","Complete the Siege of Paris campaign"],
+        ["S","Know What Is Right","Complete all territories of Francia"],
+        ["S","We Nobles Three","Defeat all three Frankish Nobles"],
+        ["S","Vive la Résistance","Reach maximum Infamy in the Rebel Missions"],
+        ["B","Future Past","Enter the Assassin Bureau in Francia"],
+        ["B","Bad Bull","Defeat the Ghost Auroch Boss"],
+        ["B","Vendange","Kill an enemy with a scythe while wearing the full Reaper armor set"],
+        ["B","Pat the Cats","Pat all the cats in Evreux"],
+        ["B","Lèse-majesté","Complete 10 Rebel Missions"]
+      ]},
+      { name: "Dawn of Ragnarök", dlc: true, t: [
+        ["S","Over the Hills…","Complete all territories of Svartalfheim"],
+        ["S","Ashes of Svartalfheim","Complete the Dawn of Ragnarök campaign"],
+        ["B","Hugr Incarnate","Fully upgrade the Hugr-Rip"],
+        ["B","Expert Storyteller","Tell Kára a Tale with at least four Boasts"],
+        ["B","It's All in the Wrist","Kill 30 enemies with an Atgeir"],
+        ["B","Aesir Spelunker","Discover all Shelters"],
+        ["B","Motsognir's Blessing","Purify Hreidmar's Cursed Armor"],
+        ["B","See No Evil","Teleport-Assassinate two enemies and fly away without being detected"],
+        ["B","Flying Fortress","Reach a Muspelheim Monolith"]
+      ]},
+      { name: "The Forgotten Saga", dlc: true, t: [
+        ["S","Sacrificial Victory","Defeat Hel with the Draugr's Toll Outfit equipped"],
+        ["S","Freedom Fighter","Reunite the dead within Kaldstad, Døkkerland and Nidheim"],
+        ["S","Pure of Heart","Defeat Nidhogg without using an Elk Shrine"],
+        ["S","Crossing Dókkerland","Complete all encounters in Dókkerland"],
+        ["B","High Kick","Knock 10 enemies off of ledges using the Kick of Tyr Ability"],
+        ["B","Royal Treatment","Find Hel's Majordomo"],
+        ["B","A Favored Customer","Buy all of Nar's Favors at least once"],
+        ["B","The Queen's Fall","Defeat Hel, ruler of Niflheim"],
+        ["B","Returning to the Roots","Return to Odin's Camp for the first time"]
+      ]}
+    ]
+  },
+  {
+    id: "odyssey", title: "Assassin's Creed Odyssey", year: 2018, plat: "PS4 na PS5",
+    note: "Verze pro PS4, na PS5 běží přes zpětnou kompatibilitu. Nejotravnější je The Cult Unmasked — všech 42 kultistů Kosmu.",
+    sets: [{ name: "Základní hra", platinum: true, t: [
+      ["P","Epic Cycle","Earn every trophy"],
+      ["B","This is Sparta!","Complete the Battle of 300"],
+      ["B","An Odyssey in the Making","Complete Episode 1"],
+      ["B","Past Mistakes","Complete Episode 2"],
+      ["B","Evil Unearthed","Complete Episode 3"],
+      ["B","The Bright Minds","Complete Episode 4"],
+      ["B","From the Ashes","Complete Episode 5"],
+      ["B","Democracy Falls","Complete Episode 6"],
+      ["B","Legend in the Making","Complete Episode 7"],
+      ["S","Taking Back Athens","Complete Episode 8"],
+      ["G","Odyssey's End","Complete Episode 9 + Epilogue"],
+      ["S","Child of Poseidon","Complete all underwater location objectives"],
+      ["B","Make It Your Own","Engrave your first item"],
+      ["B","You Work for Me Now","Recruit and assign a Legendary NPC for your ship"],
+      ["B","Shiny!","Acquire and equip your first Legendary item"],
+      ["S","I am Legend","Equip 1 Legendary melee weapon and 5 Legendary armor pieces"],
+      ["S","Are You Not Entertained?","Become Champion of the Arena"],
+      ["B","Demigod","Reach Level 50"],
+      ["B","Godly Power","Acquire a Tier 3 active Ability"],
+      ["S","Legacy Restored","Upgrade your Spear to Tier 6"],
+      ["B","Top of the Food Chain","Become the first Mercenary"],
+      ["S","The Cult Unmasked","Defeat all the Cultists of Kosmos"],
+      ["B","Stink Eye","Recover the Cyclops's eye from a goat on Kephallonia"],
+      ["B","Hermes's Homie","Unveil all sub-regions of Greece"],
+      ["B","In Perseus's Image","Defeat Medusa"],
+      ["B","A-maze-ing Victory!","Defeat the Minotaur"],
+      ["B","Eye on the Prize","Defeat the Cyclops"],
+      ["B","Riddle Me This","Outwit the Sphinx"],
+      ["S","Lord of the Seas","Fully upgrade the Adrestia"],
+      ["S","The Argonauts","Fully crew the Adrestia with Legendary Lieutenants"],
+      ["B","Master of the Hunt","Complete the Daughters of Artemis questline"],
+      ["B","Everybody Benefits","Complete Markos's questline"],
+      ["B","Trust Me, I'm a Doctor","Complete the Hippokrates questline"],
+      ["B","A Pirate's Life for Me","Complete Xenia's questline"],
+      ["S","Going For Gold","Complete the Olympic questline"],
+      ["B","Scourge of the Aegean","Sink your first Epic Ship"],
+      ["B","Blood Sport","Defeat a Mercenary in the Arena"],
+      ["B","Harder, Better, Faster, Stronger","Upgrade the Adrestia for the first time"],
+      ["B","Fashion's Creed","Equip a Legendary Armor set"],
+      ["B","Aphrodite's Embrace","Spend the night with another character"],
+      ["S","One Head Down…","Defeat a full cluster of Cultists of Kosmos"],
+      ["B","Birthright","Discover Atlantis and speak with Pythagoras"],
+      ["B","Ramming Speed","Cleave a ship in half"],
+      ["B","I Have the Power","Perform an Overpower Attack with every weapon type"],
+      ["B","War Master","Kill the Leader of any Region with Low Resources, other than Megaris"],
+      ["B","Misthios in Training","Complete 20 Bounties, War Contracts, or Naval Quests from Message Boards"],
+      ["G","Island Hopper","Complete 20 Quests on Pephka, Obsidian and Abantis islands"],
+      ["B","Infamous","Raise your Bounty to the maximum level"],
+      ["B","Hero for Hire","Win your first on land conquest battle in any region"],
+      ["B","Wrath of the Amazons","Cleave a ship while having an all-women crew"],
+      ["B","The Midas Touch","Engrave a Legendary Item with a Legendary Effect"]
+    ]}]
+  },
+  {
+    id: "origins", title: "Assassin's Creed Origins", year: 2017, plat: "PS4 na PS5",
+    note: "Verze pro PS4. Platina nevyžaduje DLC — The Hidden Ones se počítá až do 100 %.",
+    sets: [
+      { name: "Základní hra", platinum: true, t: [
+        ["P","Earn Them All!","Earn all other Assassin's Creed Origins Trophies to unlock Platinum (DLC not required)"],
+        ["G","The End","Complete the last Main Quest"],
+        ["S","The Scarab","Complete Main Quest \"The Scarab's Lies\""],
+        ["S","The Lizard","Complete Main Quest \"The Lizard's Face\""],
+        ["S","The Siege","Complete Main Quest \"The Aftermath\""],
+        ["S","Wake Up!","Complete Main Quest Dream Sequence"],
+        ["S","Almost There","Complete Main Quest \"The Final Weighing\""],
+        ["S","I'm Done Learning","Activate a Master ability"],
+        ["S","For Those About to Die…","Complete all arena events in the Krokodilopolis Arena"],
+        ["S","Fatality!","Finish an arena boss with an Overpower Attack"],
+        ["S","The Harder They Fall","Defeat the war elephants Qetesh & Resheph"],
+        ["S","Arrow Whisperer","Kill an enemy with the predator bow from more than 60 meters while controlling the arrow"],
+        ["S","Shadow of Egypt","Kill 10 enemies in a row without being detected"],
+        ["S","Archer of the Month","Headshot kill an enemy with the bow while in the air"],
+        ["S","Stargazer","Complete all 12 Stone Circles"],
+        ["S","Master Diver","Complete 15 underwater locations"],
+        ["S","Old Habits","Complete all locations"],
+        ["B","First Steps","Complete the Prologue"],
+        ["B","I'm Just Getting Started","Complete Main Quest \"Aya\""],
+        ["B","The Sea","Complete Main Quest \"Pompeius Magnus\""],
+        ["B","The Hyena","Complete Main Quest \"The Hyena\""],
+        ["B","The Crocodile","Complete Main Quest \"The Crocodile's Jaws\""],
+        ["B","I'm a Legend","Be equipped with only Legendary equipment"],
+        ["B","Overheating","Witness raining bugs in the desert"],
+        ["B","Ben-Hur","Win the first Hippodrome tournament"],
+        ["B","Road Rage","Destroy an opponent in a Hippodrome race"],
+        ["B","Slasher","Kill 3 enemies with one hit"],
+        ["B","Words of Wisdom","Complete all hermit locations"],
+        ["B","Circle of Life","Feed a predator with a corpse"],
+        ["B","Seven Farmers","Complete Side Quest \"Seven Farmers\""],
+        ["B","The Festival","Complete Side Quest \"Lady of Slaughter\""],
+        ["B","Smash!","Destroy 100 breakable objects"],
+        ["B","I Know My Land","Defog the whole map"],
+        ["B","Raider of the Lost Tomb","Complete a tomb"],
+        ["B","I Can See My House From Here!","Reach the \"Top of the World\" in the Black Desert territory"],
+        ["B","Set-up Date","Bring a tamed lion to a crocodile"],
+        ["B","Where's My Black Flag?","Defeat 8 Ship Captains"],
+        ["B","Reporter","Take 1 photo in 5 different territories"],
+        ["B","Overdesign","Kill a poisoned level 35+ enemy with the torch in less than 30 seconds"],
+        ["B","Free as a Bird","Use the eagle for a total of 30 minutes"],
+        ["B","Triathlete","Swim for 1500m, ride for 40km and run for 10km"],
+        ["B","BOOM!","Kill 30 enemies by shooting a fire arrow at oil jars"],
+        ["B","Rider's Licence","Use all types of vehicle at least once"],
+        ["B","Run For Your Life!","Run away from 3 fights with a hippo"],
+        ["B","Elementary, My Dear Bayek","Solve a papyrus mystery"],
+        ["B","Reduce, Reuse, Recycle","Sell 100 trinkets at once"],
+        ["B","Namaste","Use Dawn & Dusk to make time speed forward 30 times"],
+        ["B","You still need 8880…","Reach level 20"],
+        ["B","Defy Authority","Defeat a Phylakes"],
+        ["B","Handy Man","Craft 20 items"],
+        ["B","Roooaaarrrrr!","Tame a lion"]
+      ]},
+      { name: "The Hidden Ones", dlc: true, t: [
+        ["S","Walls of the Ruler","Complete the Walls-of-the-Ruler citadel"],
+        ["S","Surgical Strikes","Assassinate Tacito, Ptahmose and Ampelius"],
+        ["S","New Recruits","Complete Side DLC Quests \"Rise of Shaqilat\" and \"Shadows of the Scarab\""],
+        ["S","The Greater Good","Complete Main DLC Quest \"The Greater Good\""],
+        ["B","What Time is It?","Perform a leap of faith from Arsinoe's sundial obelisk between 10 am and noon"],
+        ["B","Zip it Off","Perform 3 Assassinations from a zipline"],
+        ["B","Prison Break","Free 20 Rebels"],
+        ["B","Team Play","Kill an enemy with a headshot while they are being harassed by Senu"]
+      ]}
+    ]
+  }
+];
+
+// ---- model -----------------------------------------------------------------
+const GRADE_CLASS = { P: "p", G: "g", S: "s", B: "b" };
+const GRADE_NAME  = { P: "Platinum", G: "Gold", S: "Silver", B: "Bronze" };
+const ORDER = ["P", "G", "S", "B"];
+
+const slug = s => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+  .replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || "t";
+
+for (const g of GAMES) {
+  const seen = new Set();
+  g.all = [];
+  for (const st of g.sets) {
+    st.items = st.t.map(([grade, name, desc]) => {
+      let id = slug(name), n = 2;
+      while (seen.has(id)) id = slug(name) + "-" + n++;
+      seen.add(id);
+      const it = { id, grade, name, desc };
+      g.all.push(it);
+      return it;
+    });
+  }
+  g.platSet = g.sets.find(s => s.platinum) || g.sets[0];
+  g.hasDlc = g.sets.some(s => s.dlc);
+}
+
+const done = {};
+for (const g of GAMES) done[g.id] = new Set();
+
+const state = { gameId: GAMES[0].id, filter: "all", q: "" };
+const game = () => GAMES.find(g => g.id === state.gameId);
+
+const countDone = items => items.reduce((n, it) => n + (done[state.gameId].has(it.id) ? 1 : 0), 0);
+const doneIn = (g, items) => items.reduce((n, it) => n + (done[g.id].has(it.id) ? 1 : 0), 0);
+
+// ---- storage ---------------------------------------------------------------
+const LS_KEY = "ac-trophy-log-v1";
+let db = null;
+const timers = {};
+const chains = {};
+
+function readLocal() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
+    for (const g of GAMES) if (Array.isArray(raw[g.id])) done[g.id] = new Set(raw[g.id]);
+  } catch (e) { /* private window, blocked storage — start empty */ }
+}
+function writeLocal() {
+  try {
+    const out = {};
+    for (const g of GAMES) out[g.id] = [...done[g.id]];
+    localStorage.setItem(LS_KEY, JSON.stringify(out));
+  } catch (e) { /* nothing we can do; cloud copy still applies */ }
+}
+
+function setSync(kind) {
+  const el = document.getElementById("sync");
+  if (kind === "cloud") el.innerHTML = "<i>&#9679;</i> Postup se ukládá k tvému účtu — na mobilu uvidíš to samé";
+  else if (kind === "local") el.innerHTML = "<i>&#9679;</i> Postup se ukládá jen v tomhle prohlížeči";
+  else el.textContent = "Ukládám…";
+}
+
+function persist(gameId) {
+  writeLocal();
+  if (!db) return;
+  clearTimeout(timers[gameId]);
+  timers[gameId] = setTimeout(() => {
+    const body = { done: {} };
+    for (const id of done[gameId]) body.done[id] = true;
+    chains[gameId] = (chains[gameId] || Promise.resolve())
+      .then(() => db.doc("progress/" + gameId).set(body))
+      .catch(() => { /* keep the local copy; next toggle retries */ });
+  }, 450);
+}
+
+async function initCloud() {
+  try { db = await window.claude?.use?.("db"); } catch (e) { db = null; }
+  if (!db) { setSync("local"); return; }
+  setSync("cloud");
+  for (const g of GAMES) {
+    try {
+      db.doc("progress/" + g.id).onSnapshot(snap => {
+        if (!snap.exists) { if (done[g.id].size) persist(g.id); return; }
+        const remote = (snap.data() || {}).done;
+        if (!remote || typeof remote !== "object") return;
+        const next = new Set(Object.keys(remote).filter(k => remote[k]));
+        if (next.size === done[g.id].size && [...next].every(id => done[g.id].has(id))) return;
+        done[g.id] = next;
+        writeLocal();
+        render();
+      }, () => { /* subscription died; local copy carries on */ });
+    } catch (e) { /* bad path can't happen, but never break the page */ }
+  }
+}
+
+// ---- render ----------------------------------------------------------------
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const pct = (a, b) => b ? Math.round(a / b * 100) : 0;
+
+function renderTally() {
+  const totalAll = GAMES.reduce((n, g) => n + g.all.length, 0);
+  const doneAll = GAMES.reduce((n, g) => n + doneIn(g, g.all), 0);
+  const plats = GAMES.filter(g => doneIn(g, g.platSet.items) === g.platSet.items.length).length;
+  document.getElementById("tally").innerHTML =
+    '<div><span class="num">' + plats + "/" + GAMES.length + '</span><span class="cap">Platin</span></div>' +
+    '<div><span class="num">' + doneAll + "/" + totalAll + '</span><span class="cap">Trofejí</span></div>';
+}
+
+function renderRail() {
+  let h = '<p class="rail-head">Hry</p>';
+  for (const g of GAMES) {
+    const d = doneIn(g, g.platSet.items), t = g.platSet.items.length;
+    const platted = d === t;
+    h += '<button class="gamebtn" type="button" data-game="' + g.id + '" aria-current="' + (g.id === state.gameId) + '">' +
+      '<span class="g-name">' + esc(g.title.replace("Assassin's Creed ", "")) + "</span>" +
+      '<span class="bar' + (platted ? " is-plat" : "") + '"><i style="width:' + pct(d, t) + '%"></i></span>' +
+      '<span class="g-meta"><span>' + g.year + "</span><span>" + (platted ? "Platina" : d + "/" + t) + "</span></span>" +
+      "</button>";
+  }
+  document.getElementById("rail").innerHTML = h;
+}
+
+function ringSvg(p) {
+  const C = 2 * Math.PI * 44;
+  return '<svg class="ring" viewBox="0 0 104 104" role="img" aria-label="Postup k platině ' + p + ' procent">' +
+    '<circle class="track" cx="52" cy="52" r="44" fill="none" stroke-width="8"/>' +
+    '<circle class="fill" cx="52" cy="52" r="44" fill="none" stroke-width="8" ' +
+    'stroke-dasharray="' + C.toFixed(1) + '" stroke-dashoffset="' + (C * (1 - p / 100)).toFixed(1) + '" ' +
+    'transform="rotate(-90 52 52)"/>' +
+    '<text class="pct" x="52" y="50" text-anchor="middle" dominant-baseline="middle">' + p + "%</text>" +
+    '<text class="lbl" x="52" y="66" text-anchor="middle">PLATINA</text></svg>';
+}
+
+function renderGameHead(g) {
+  const pd = countDone(g.platSet.items), pt = g.platSet.items.length;
+  const ad = countDone(g.all), at = g.all.length;
+  let metals = "";
+  for (const k of ORDER) {
+    const items = g.all.filter(i => i.grade === k);
+    if (!items.length) continue;
+    metals += '<div class="metal"><span class="pip ' + GRADE_CLASS[k] + '"></span>' +
+      "<span>" + GRADE_NAME[k] + "</span><span><b>" + countDone(items) + "</b>/" + items.length + "</span></div>";
+  }
+  return '<section class="gamehead">' +
+    '<div class="gh-text">' +
+      "<h2>" + esc(g.title) + "</h2>" +
+      '<p class="sub">' + g.year + " &middot; " + esc(g.plat) + " &middot; " + at + " trofejí" + (g.hasDlc ? " včetně DLC" : "") + "</p>" +
+      '<p class="gh-note">' + esc(g.note) + "</p>" +
+    "</div>" +
+    '<div class="ring-wrap">' + ringSvg(pct(pd, pt)) +
+      '<div class="metals">' + metals +
+        '<div class="metal" style="margin-top:4px"><span></span><span>Celkem</span><span><b>' + ad + "</b>/" + at + "</span></div>" +
+      "</div>" +
+    "</div>" +
+  "</section>";
+}
+
+function matches(it) {
+  if (state.filter === "todo" && done[state.gameId].has(it.id)) return false;
+  if (state.filter === "done" && !done[state.gameId].has(it.id)) return false;
+  if (state.q) {
+    const q = state.q.toLowerCase();
+    if (!(it.name.toLowerCase().includes(q) || it.desc.toLowerCase().includes(q))) return false;
+  }
+  return true;
+}
+
+function renderSets(g) {
+  let h = "", shown = 0;
+  for (const st of g.sets) {
+    const vis = st.items.filter(matches);
+    if (!vis.length) continue;
+    shown += vis.length;
+    h += '<section class="set"><div class="set-head"><h3>' + esc(st.name) + "</h3>" +
+      (st.dlc ? '<span class="flag">DLC</span>' : '<span class="flag">Nutné na platinu</span>') +
+      '<span class="count">' + countDone(st.items) + " / " + st.items.length + "</span></div>";
+    for (const it of vis) {
+      const on = done[state.gameId].has(it.id);
+      h += '<button class="row" type="button" data-id="' + it.id + '" aria-pressed="' + on + '">' +
+        '<span class="box"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.6l3.2 3.2L13 4.8"/></svg></span>' +
+        '<span class="pip ' + GRADE_CLASS[it.grade] + '" title="' + GRADE_NAME[it.grade] + '"></span>' +
+        '<span><span class="t-name">' + esc(it.name) + '</span><span class="t-desc">' + esc(it.desc) + "</span></span>" +
+        "</button>";
+    }
+    h += "</section>";
+  }
+  if (!shown) h = '<p class="empty">Nic neodpovídá — zkus jiný filtr nebo jiné hledání.</p>';
+  return h;
+}
+
+function renderMain() {
+  const g = game();
+  document.getElementById("main").innerHTML =
+    renderGameHead(g) +
+    '<div class="controls">' +
+      '<input class="search" id="q" type="search" placeholder="Hledat trofej…" value="' + esc(state.q) + '" aria-label="Hledat trofej">' +
+      '<div class="seg" role="group" aria-label="Filtr">' +
+        '<button type="button" data-filter="all" aria-pressed="' + (state.filter === "all") + '">Vše</button>' +
+        '<button type="button" data-filter="todo" aria-pressed="' + (state.filter === "todo") + '">Zbývá</button>' +
+        '<button type="button" data-filter="done" aria-pressed="' + (state.filter === "done") + '">Hotovo</button>' +
+      "</div>" +
+      '<button class="ghost" type="button" id="reset">Vynulovat hru</button>' +
+    "</div>" +
+    renderSets(g);
+}
+
+function render() { renderTally(); renderRail(); renderMain(); }
+
+// ---- events ----------------------------------------------------------------
+document.addEventListener("click", e => {
+  const gb = e.target.closest(".gamebtn");
+  if (gb) { state.gameId = gb.dataset.game; state.q = ""; render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+
+  const row = e.target.closest(".row");
+  if (row) {
+    const id = row.dataset.id, set = done[state.gameId];
+    if (set.has(id)) set.delete(id); else set.add(id);
+    persist(state.gameId);
+    render();
+    return;
+  }
+
+  const fb = e.target.closest("[data-filter]");
+  if (fb) { state.filter = fb.dataset.filter; render(); return; }
+
+  const rb = e.target.closest("#reset");
+  if (rb) {
+    const g = game();
+    if (!done[g.id].size) return;
+    if (rb.dataset.armed !== "1") {
+      rb.dataset.armed = "1";
+      rb.textContent = "Opravdu vynulovat?";
+      clearTimeout(resetTimer);
+      resetTimer = setTimeout(() => { rb.dataset.armed = ""; rb.textContent = "Vynulovat hru"; }, 4000);
+      return;
+    }
+    clearTimeout(resetTimer);
+    done[g.id] = new Set();
+    persist(g.id);
+    render();
+  }
+});
+let resetTimer;
+
+document.addEventListener("input", e => {
+  if (e.target.id !== "q") return;
+  state.q = e.target.value;
+  const pos = e.target.selectionStart;
+  renderMain();
+  const box = document.getElementById("q");
+  box.focus();
+  try { box.setSelectionRange(pos, pos); } catch (err) { /* search inputs can refuse */ }
+  renderTally();
+});
+
+
+// ---- transfer: sync link, backup file ---------------------------------------
+const SYNC_V = 1;
+const FLAT = [];
+for (const g of GAMES) for (const it of g.all) FLAT.push([g.id, it.id]);
+const BYTES = Math.ceil(FLAT.length / 8);
+const IN_CLAUDE = !!window.claude;
+
+function b64u(bytes) {
+  let s = "";
+  for (const b of bytes) s += String.fromCharCode(b);
+  return btoa(s).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+function unb64u(str) {
+  try {
+    const t = str.replace(/-/g, "+").replace(/_/g, "/");
+    const bin = atob(t + "===".slice((t.length + 3) % 4));
+    const u = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+    return u;
+  } catch (e) { return null; }
+}
+
+function encodeProgress() {
+  const bytes = new Uint8Array(1 + BYTES);
+  bytes[0] = SYNC_V;
+  FLAT.forEach(([gid, tid], i) => {
+    if (done[gid].has(tid)) bytes[1 + (i >> 3)] |= 1 << (i & 7);
+  });
+  return b64u(bytes);
+}
+function decodeProgress(code) {
+  const bytes = unb64u(code);
+  if (!bytes || bytes[0] !== SYNC_V || bytes.length !== 1 + BYTES) return null;
+  const map = {};
+  for (const g of GAMES) map[g.id] = new Set();
+  FLAT.forEach(([gid, tid], i) => {
+    if (bytes[1 + (i >> 3)] & (1 << (i & 7))) map[gid].add(tid);
+  });
+  return map;
+}
+
+const totalDone = m => GAMES.reduce((n, g) => n + (m[g.id] ? m[g.id].size : 0), 0);
+
+function applyMap(map) {
+  for (const g of GAMES) done[g.id] = map[g.id] || new Set();
+  for (const g of GAMES) persist(g.id);
+  render();
+}
+
+function note(msg) { document.getElementById("tfnote").textContent = msg || ""; }
+function showOut(text) {
+  const out = document.getElementById("tfout");
+  out.value = text;
+  out.hidden = false;
+  out.focus();
+  out.select();
+}
+
+function showBanner(msg, onYes) {
+  const el = document.getElementById("banner");
+  el.innerHTML = "<p>" + esc(msg) + "</p>" +
+    (onYes ? '<span class="b-acts"><button class="ghost" type="button" id="b-yes">Načíst</button>' +
+             '<button class="ghost" type="button" id="b-no">Nechat být</button></span>'
+           : '<span class="b-acts"><button class="ghost" type="button" id="b-no">Zavřít</button></span>');
+  el.hidden = false;
+  const close = () => { el.hidden = true; el.innerHTML = ""; };
+  if (onYes) document.getElementById("b-yes").onclick = () => { onYes(); close(); };
+  document.getElementById("b-no").onclick = close;
+}
+
+function readSyncLink() {
+  const m = /[#&]s=([A-Za-z0-9_-]+)/.exec(location.hash || "");
+  if (!m) return;
+  try { history.replaceState(null, "", location.pathname + location.search); } catch (e) { /* sandboxed frame */ }
+  const map = decodeProgress(m[1]);
+  if (!map) { showBanner("Ten sync odkaz nejde přečíst — nejspíš je z verze s jiným seznamem trofejí.", null); return; }
+  const incoming = totalDone(map), current = GAMES.reduce((n, g) => n + done[g.id].size, 0);
+  if (!current) { applyMap(map); showBanner("Načteno " + incoming + " odškrtnutých trofejí z odkazu.", null); return; }
+  showBanner("Odkaz nese " + incoming + " odškrtnutých trofejí, tady jich máš " + current +
+             ". Načtením se to, co máš tady, přepíše.", () => applyMap(map));
+}
+
+document.getElementById("mklink").onclick = async () => {
+  const url = location.origin + location.pathname + "#s=" + encodeProgress();
+  try {
+    await navigator.clipboard.writeText(url);
+    note("Odkaz zkopírován. Pošli si ho na druhé zařízení a otevři.");
+  } catch (e) {
+    note("Prohlížeč nepustil kopírování — zkopíruj si odkaz ručně:");
+    showOut(url);
+  }
+};
+
+document.getElementById("exp").onclick = () => {
+  const payload = { app: "ac-trophy-log", version: SYNC_V, saved: new Date().toISOString(), progress: {} };
+  for (const g of GAMES) payload.progress[g.id] = [...done[g.id]];
+  const json = JSON.stringify(payload, null, 2);
+  if (IN_CLAUDE) {
+    note("Tady prohlížeč stahování nepustí — zkopíruj si zálohu odsud:");
+    showOut(json);
+    return;
+  }
+  try {
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([json], { type: "application/json" }));
+    a.download = "ac-trofeje-" + new Date().toISOString().slice(0, 10) + ".json";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    note("Záloha stažena.");
+  } catch (e) {
+    note("Stahování se nepovedlo — zkopíruj si zálohu odsud:");
+    showOut(json);
+  }
+};
+
+document.getElementById("imp").onchange = e => {
+  const file = e.target.files && e.target.files[0];
+  e.target.value = "";
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    let data;
+    try { data = JSON.parse(r.result); } catch (err) { note("Ten soubor není platná záloha."); return; }
+    if (!data || !data.progress) { note("V souboru není žádný postup."); return; }
+    const map = {};
+    for (const g of GAMES) {
+      const valid = new Set(g.all.map(t => t.id));
+      map[g.id] = new Set((data.progress[g.id] || []).filter(id => valid.has(id)));
+    }
+    applyMap(map);
+    note("Načteno " + totalDone(map) + " odškrtnutých trofejí ze zálohy.");
+  };
+  r.onerror = () => note("Soubor se nepodařilo přečíst.");
+  r.readAsText(file);
+};
+
+if (!IN_CLAUDE) document.body.classList.add("standalone");
+document.getElementById("tf-intro").textContent = IN_CLAUDE
+  ? "Tady se postup ukládá k tvému účtu sám. Záloha do souboru je navíc, když si ho chceš odnést jinam."
+  : "Postup žije v tomhle prohlížeči. Sync odkaz si ho zabalí do URL (52 znaků) — pošli si ho na mobil a otevři. Záloha do souboru je na delší uchování.";
+
+// ---- boot ------------------------------------------------------------------
+readLocal();
+render();
+readSyncLink();
+initCloud();
+</script>
+</body>
+</html>
