@@ -37,8 +37,13 @@ Prstenec u každé hry počítá postup **k platině**, ne ke 100 %. U žádné 
 
 Názvy a popisy jsou přeložené do češtiny. Je to vlastní překlad — Ubisoft trofeje do češtiny
 nelokalizuje, takže na PSN je uvidíš anglicky. Originální název proto zůstává pod tím českým:
-to je to, co hledáš v guidech a na YouTube. U 255 trofejí je navíc tip, co je pro ni potřeba
-udělat; trofeje, které jdou nenávratně minout, jsou označené červeně.
+to je to, co hledáš v guidech a na YouTube. Kliknutím na trofej se rozbalí panel s tipem, co je pro ni potřeba udělat — takový tip má 255
+z 782 trofejí. Odškrtává se zvlášť, čtverečkem vlevo, takže čtení tipu nic needškrtne.
+Trofeje, které jdou nenávratně minout, mají u názvu červený štítek **missable**.
+
+Ve verzi na claude.ai je v tom panelu navíc tlačítko **Zeptat se Claudea**, které se doptá
+přímo na konkrétní trofej. Na GitHub Pages se nezobrazuje — to API existuje jen uvnitř
+claude.ai. Odpovědi se drží jen do zavření stránky.
 
 ### Co hlídat
 

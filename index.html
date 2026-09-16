@@ -412,20 +412,104 @@
     display: grid;
     grid-template-columns: 22px 12px minmax(0, 1fr);
     align-items: start;
-    gap: 12px;
-    padding: 14px 10px 14px 4px;
+    gap: 0 12px;
+    padding: 12px 10px 12px 4px;
     border-bottom: 1px solid var(--line-soft);
-    cursor: pointer;
-    background: none;
-    border-left: 0; border-right: 0; border-top: 0;
-    width: 100%;
-    text-align: left;
-    font-family: inherit;
-    color: inherit;
   }
   .row:hover { background: var(--surface-2); }
-  .row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-  .row .pip { margin-top: 5px; }
+  .row .pip { margin-top: 6px; }
+
+  .box-btn, .row-main {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .box-btn:focus-visible, .row-main:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+    border-radius: var(--r-sm);
+  }
+  .row-main {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    min-width: 0;
+  }
+  .t-text { min-width: 0; }
+  .chev {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin-top: 3px;
+    color: var(--ink-3);
+    transition: transform .15s ease;
+  }
+  .chev svg { width: 16px; height: 16px; display: block; }
+  .row-main[aria-expanded="true"] .chev { transform: rotate(180deg); color: var(--accent); }
+
+  .badge-miss {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 0 6px;
+    border: 1px solid var(--danger);
+    border-radius: var(--r-sm);
+    color: var(--danger);
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    vertical-align: 2px;
+  }
+
+  .detail {
+    grid-column: 1 / -1;
+    margin: 12px 0 2px;
+    padding: 13px 15px;
+    background: var(--surface-2);
+    border-left: 2px solid var(--accent);
+  }
+  .detail p { margin: 0; font-size: var(--fs-sm); line-height: 1.5; color: var(--ink-2); }
+  .detail .d-head {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 5px;
+  }
+  .ai-btn {
+    appearance: none;
+    margin-top: 12px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    color: var(--ink-2);
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    padding: 5px 12px;
+    cursor: pointer;
+  }
+  .ai-btn:hover:not(:disabled) { color: var(--accent); border-color: var(--accent); }
+  .ai-btn:disabled { opacity: .6; cursor: default; }
+  .ai-out {
+    margin-top: 12px;
+    padding-top: 11px;
+    border-top: 1px solid var(--line);
+    font-size: var(--fs-sm);
+    line-height: 1.55;
+    color: var(--ink);
+    white-space: pre-wrap;
+  }
 
   .box {
     width: 20px; height: 20px;
@@ -438,14 +522,13 @@
     flex: none;
   }
   .box svg { width: 13px; height: 13px; opacity: 0; transform: scale(.7); transition: opacity .12s, transform .12s; }
-  .row[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
-  .row[aria-pressed="true"] .box svg { opacity: 1; transform: scale(1); stroke: var(--accent-ink); }
-  .row[aria-pressed="true"] .t-name { color: var(--ink-2); text-decoration: line-through; text-decoration-thickness: 1px; }
-  .row[aria-pressed="true"] .pip { filter: saturate(.25); opacity: .55; }
-  .row[aria-pressed="true"] .t-desc,
-  .row[aria-pressed="true"] .t-tip { color: var(--ink-3); }
-  .row[aria-pressed="true"] .t-tip.is-missable { color: var(--ink-3); border-left-color: var(--line); opacity: .8; }
-  .row[aria-pressed="true"] .t-en { opacity: .7; }
+  .box-btn[aria-pressed="true"] .box { background: var(--accent); border-color: var(--accent); }
+  .box-btn[aria-pressed="true"] .box svg { opacity: 1; transform: scale(1); stroke: var(--accent-ink); }
+  .row.is-done .t-name { color: var(--ink-2); text-decoration: line-through; text-decoration-thickness: 1px; }
+  .row.is-done .pip { filter: saturate(.25); opacity: .55; }
+  .row.is-done .t-desc { color: var(--ink-3); }
+  .row.is-done .t-en { opacity: .7; }
+  .row.is-done .badge-miss { opacity: .5; }
 
   .t-name { display: block; font-weight: 600; font-size: var(--fs-md); line-height: 1.35; }
   .t-en {
@@ -458,20 +541,6 @@
     margin-top: 1px;
   }
   .t-desc { display: block; color: var(--ink-2); font-size: var(--fs-sm); line-height: 1.45; margin-top: 5px; }
-  .t-tip {
-    display: block;
-    margin-top: 7px;
-    padding-left: 11px;
-    border-left: 2px solid var(--line);
-    color: var(--ink-2);
-    font-size: var(--fs-sm);
-    line-height: 1.45;
-  }
-  .t-tip.is-missable {
-    border-left-color: var(--danger);
-    color: var(--danger);
-    font-weight: 500;
-  }
 
   .empty {
     padding: 30px 4px;
@@ -528,7 +597,8 @@
     .wrap { padding-inline: 16px; }
     h1 { font-size: 22px; }
     .gamehead { padding: 18px 16px; gap: 20px; }
-    .row { grid-template-columns: 20px 10px minmax(0, 1fr); gap: 10px; }
+    .row { grid-template-columns: 20px 10px minmax(0, 1fr); gap: 0 10px; }
+    .detail { padding: 12px 13px; }
   }
   /* ---------- transfer / banner ---------- */
   .banner {
@@ -1609,6 +1679,10 @@ const done = {};
 for (const g of GAMES) done[g.id] = new Set();
 
 const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned: null };
+const openRows = new Set();      // trophy ids expanded right now
+const aiAnswers = new Map();     // "gameId/trophyId" -> answer, kept across re-renders
+const aiBusy = new Set();
+let sampler = null, aiReady = false;
 const game = () => GAMES.find(g => g.id === state.gameId);
 
 const countDone = items => items.reduce((n, it) => n + (done[state.gameId].has(it.id) ? 1 : 0), 0);
@@ -1787,6 +1861,22 @@ function matches(it) {
   return true;
 }
 
+function detailHtml(it, open) {
+  const key = state.gameId + "/" + it.id;
+  const answer = aiAnswers.get(key);
+  const busy = aiBusy.has(it.id);
+  let h = '<div class="detail" id="d-' + it.id + '"' + (open ? "" : " hidden") + ">";
+  h += '<p class="d-head">Jak na to</p>';
+  h += "<p>" + (it.tip ? esc(it.tip) : "Tuhle trofej popisuje samotné zadání — nic navíc k ní nemám.") + "</p>";
+  if (aiReady) {
+    h += '<button class="ai-btn" type="button" data-ask="' + it.id + '"' + (busy ? " disabled" : "") + ">" +
+      (busy ? "Ptám se…" : answer ? "Zeptat se znovu" : "Zeptat se Claudea") + "</button>";
+    h += '<div class="ai-out" id="ai-' + it.id + '"' + (answer || busy ? "" : " hidden") + ">" +
+      esc(answer || "") + "</div>";
+  }
+  return h + "</div>";
+}
+
 function renderSets(g) {
   let h = "", shown = 0;
   for (const st of g.sets) {
@@ -1798,16 +1888,25 @@ function renderSets(g) {
       '<span class="count">' + countDone(st.items) + " / " + st.items.length + "</span></div>";
     for (const it of vis) {
       const on = done[state.gameId].has(it.id);
-      h += '<button class="row" type="button" data-id="' + it.id + '" aria-pressed="' + on + '">' +
-        '<span class="box"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.6l3.2 3.2L13 4.8"/></svg></span>' +
+      const open = openRows.has(it.id);
+      const missable = /^Missable/.test(it.tip);
+      h += '<div class="row' + (on ? " is-done" : "") + '">' +
+        '<button class="box-btn" type="button" data-toggle="' + it.id + '" aria-pressed="' + on + '" ' +
+          'aria-label="Odškrtnout ' + esc(it.cs) + '">' +
+          '<span class="box"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 8.6l3.2 3.2L13 4.8"/></svg></span>' +
+        "</button>" +
         '<span class="pip ' + GRADE_CLASS[it.grade] + '" title="' + GRADE_NAME[it.grade] + '"></span>' +
-        "<span>" +
-          '<span class="t-name">' + esc(it.cs) + "</span>" +
-          '<span class="t-en">' + esc(it.name) + "</span>" +
-          '<span class="t-desc">' + esc(it.csDesc) + "</span>" +
-          (it.tip ? '<span class="t-tip' + (/^Missable/.test(it.tip) ? " is-missable" : "") + '">' + esc(it.tip) + "</span>" : "") +
-        "</span>" +
-        "</button>";
+        '<button class="row-main" type="button" data-expand="' + it.id + '" aria-expanded="' + open + '" aria-controls="d-' + it.id + '">' +
+          '<span class="t-text">' +
+            '<span class="t-name">' + esc(it.cs) +
+              (missable ? '<span class="badge-miss">missable</span>' : "") + "</span>" +
+            '<span class="t-en">' + esc(it.name) + "</span>" +
+            '<span class="t-desc">' + esc(it.csDesc) + "</span>" +
+          "</span>" +
+          '<span class="chev" aria-hidden="true"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6.5L8 10.5L12 6.5"/></svg></span>' +
+        "</button>" +
+        detailHtml(it, open) +
+        "</div>";
     }
     h += "</section>";
   }
@@ -1833,17 +1932,78 @@ function renderMain() {
 
 function render() { renderTally(); renderRail(); renderMain(); }
 
+async function initAi() {
+  // Only the copy published on claude.ai can ask Claude; on GitHub Pages this stays null
+  // and the button is never rendered.
+  try { sampler = await window.claude?.use?.("sample"); } catch (e) { sampler = null; }
+  if (!sampler) return;
+  aiReady = true;
+  render();
+}
+
+async function askClaude(it) {
+  if (!sampler || aiBusy.has(it.id)) return;
+  const key = state.gameId + "/" + it.id;
+  const g = game();
+  aiBusy.add(it.id);
+  aiAnswers.delete(key);
+  render();
+
+  const paint = text => {
+    aiAnswers.set(key, text);
+    const el = document.getElementById("ai-" + it.id);
+    if (el) { el.hidden = false; el.textContent = text; }
+  };
+
+  const prompt =
+    "Jsi zkušený lovec trofejí. Hráč hraje " + g.title + " na PS5 a ptá se na konkrétní trofej.\n\n" +
+    "Název trofeje: " + it.name + "\nOficiální popis: " + it.desc + "\n\n" +
+    "Napiš česky ve třech až pěti větách, jak ji získat: kde to je, co k tomu potřebuje mít " +
+    "odemčené a na co si dát pozor. Piš rovnou k věci, bez úvodu a bez opakování zadání. " +
+    "Jestli jde trofej nenávratně minout, napiš to hned první větou. " +
+    "Pokud si nejsi jistý, řekni to rovnou místo hádání.";
+
+  try {
+    const res = await sampler(prompt, { modelTier: "default", cache: true, onText: t => paint(t.text) });
+    paint(res.text);
+  } catch (err) {
+    const code = err && err.code;
+    if (code === "not_granted") { aiReady = false; }
+    else if (code === "rate_limited") paint("Moc dotazů za sebou — zkus to za chvíli znovu.");
+    else if (err && err.text) paint(err.text);
+    else paint("Nepovedlo se zeptat. Zkus to prosím znovu.");
+  } finally {
+    aiBusy.delete(it.id);
+    render();
+  }
+}
+
 // ---- events ----------------------------------------------------------------
 document.addEventListener("click", e => {
   const gb = e.target.closest(".gamebtn");
-  if (gb) { state.gameId = gb.dataset.game; state.q = ""; render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
+  if (gb) { state.gameId = gb.dataset.game; state.q = ""; openRows.clear(); render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
 
-  const row = e.target.closest(".row");
-  if (row) {
-    const id = row.dataset.id, set = done[state.gameId];
+  const box = e.target.closest("[data-toggle]");
+  if (box) {
+    const id = box.dataset.toggle, set = done[state.gameId];
     if (set.has(id)) set.delete(id); else set.add(id);
     persist(state.gameId);
     render();
+    return;
+  }
+
+  const ask = e.target.closest("[data-ask]");
+  if (ask) {
+    const it = game().all.find(t => t.id === ask.dataset.ask);
+    if (it) askClaude(it);
+    return;
+  }
+
+  const exp = e.target.closest("[data-expand]");
+  if (exp) {
+    const id = exp.dataset.expand;
+    if (openRows.has(id)) openRows.delete(id); else openRows.add(id);
+    renderMain();
     return;
   }
 
@@ -2051,6 +2211,7 @@ if (state.pinned) state.gameId = state.pinned;
 render();
 readSyncLink();
 initCloud();
+initAi();
 </script>
 </body>
 </html>
