@@ -33,6 +33,10 @@ Hry jsou seřazené chronologicky od nejstaršího dílu. Jednu hru si můžeš 
 **Připnout** v její hlavičce — vyskočí nad ostatní do sekce „Právě hraju“ a stránka se na ní
 příště rovnou otevře. Připnutí se drží stejně jako postup, takže platí i na druhém zařízení.
 
+Odškrtnutá trofej se propadne na konec své sekce, aby zbývající zůstávaly nahoře — pod
+oddělovačem **Hotovo**. Vypíná se tlačítkem **Hotové dolů**; u starších dílů, kde je půlka
+trofejí „Complete Sequence 1–13“, se vyplatí ho vypnout a nechat pořadí podle seznamu.
+
 Prstenec u každé hry počítá postup **k platině**, ne ke 100 %. U žádné z těch her se DLC do platiny nepočítá — u Valhally je to rozdíl 87 proti 51. DLC sekce jsou v seznamu označené zvlášť.
 
 Názvy a popisy jsou přeložené do češtiny. Je to vlastní překlad — Ubisoft trofeje do češtiny

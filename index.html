@@ -371,6 +371,31 @@
     cursor: pointer;
   }
   .ghost:hover { color: var(--danger); border-color: var(--danger); }
+  .ghost.toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .ghost.toggle[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .done-sep {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 18px 0 2px;
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .done-sep::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
 
   /* ---------- trophy sets ---------- */
   .set { margin-top: 26px; }
@@ -1688,7 +1713,7 @@ GAMES.sort((a, b) => SERIES_ORDER.indexOf(a.id) - SERIES_ORDER.indexOf(b.id));
 const done = {};
 for (const g of GAMES) done[g.id] = new Set();
 
-const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned: null };
+const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned: null, sinkDone: true };
 const openRows = new Set();      // trophy ids expanded right now
 const aiAnswers = new Map();     // "gameId/trophyId" -> answer, kept across re-renders
 const aiBusy = new Set();
@@ -1703,6 +1728,7 @@ const doneIn = (g, items) => items.reduce((n, it) => n + (done[g.id].has(it.id) 
 const LS_KEY = "ac-trophy-log-v1";
 const LS_PIN = "ac-trophy-log-pin-v1";
 const LS_AI  = "ac-trophy-log-answers-v1";
+const LS_SINK = "ac-trophy-log-sink-v1";
 let pinTimer, pinChain;
 let answersUnsub = null, answersFor = null;
 let db = null;
@@ -1717,6 +1743,7 @@ function readLocal() {
   try {
     const pin = localStorage.getItem(LS_PIN);
     if (pin && GAMES.some(g => g.id === pin)) state.pinned = pin;
+    state.sinkDone = localStorage.getItem(LS_SINK) !== "0";
   } catch (e) { /* same */ }
   try {
     const saved = JSON.parse(localStorage.getItem(LS_AI) || "{}");
@@ -1792,12 +1819,15 @@ function watchAnswers(gameId) {
 }
 
 function persistPin() {
-  try { localStorage.setItem(LS_PIN, state.pinned || ""); } catch (e) { /* blocked storage */ }
+  try {
+    localStorage.setItem(LS_PIN, state.pinned || "");
+    localStorage.setItem(LS_SINK, state.sinkDone ? "1" : "0");
+  } catch (e) { /* blocked storage */ }
   if (!db) return;
   clearTimeout(pinTimer);
   pinTimer = setTimeout(() => {
     pinChain = (pinChain || Promise.resolve())
-      .then(() => db.doc("settings/main").set({ pinned: state.pinned || "" }))
+      .then(() => db.doc("settings/main").set({ pinned: state.pinned || "", sinkDone: state.sinkDone }))
       .catch(() => { /* local copy still applies */ });
   }, 300);
 }
@@ -1822,11 +1852,17 @@ async function initCloud() {
   try {
     db.doc("settings/main").onSnapshot(snap => {
       if (!snap.exists) { if (state.pinned) persistPin(); return; }
-      const pin = (snap.data() || {}).pinned || null;
+      const data = snap.data() || {};
+      const pin = data.pinned || null;
       const valid = pin && GAMES.some(g => g.id === pin) ? pin : null;
-      if (valid === state.pinned) return;
+      const sink = data.sinkDone !== false;
+      if (valid === state.pinned && sink === state.sinkDone) return;
       state.pinned = valid;
-      try { localStorage.setItem(LS_PIN, valid || ""); } catch (e) { /* blocked */ }
+      state.sinkDone = sink;
+      try {
+        localStorage.setItem(LS_PIN, valid || "");
+        localStorage.setItem(LS_SINK, sink ? "1" : "0");
+      } catch (e) { /* blocked */ }
       render();
     }, () => { /* pin stays local */ });
   } catch (e) { /* never break the page over a pin */ }
@@ -1964,10 +2000,16 @@ function renderSets(g) {
     const vis = st.items.filter(matches);
     if (!vis.length) continue;
     shown += vis.length;
+    // filter() is stable, so each group keeps the list's own order
+    const todo = state.sinkDone ? vis.filter(it => !done[state.gameId].has(it.id)) : vis;
+    const finished = state.sinkDone ? vis.filter(it => done[state.gameId].has(it.id)) : [];
     h += '<section class="set"><div class="set-head"><h3>' + esc(st.name) + "</h3>" +
       (st.dlc ? '<span class="flag">DLC</span>' : '<span class="flag">Nutné na platinu</span>') +
       '<span class="count">' + countDone(st.items) + " / " + st.items.length + "</span></div>";
-    for (const it of vis) {
+    for (const it of todo.concat(finished)) {
+      if (finished.length && todo.length && it === finished[0]) {
+        h += '<p class="done-sep"><span>Hotovo</span></p>';
+      }
       const on = done[state.gameId].has(it.id);
       const open = openRows.has(it.id);
       const missable = /^Missable/.test(it.tip);
@@ -2006,6 +2048,7 @@ function renderMain() {
         '<button type="button" data-filter="todo" aria-pressed="' + (state.filter === "todo") + '">Zbývá</button>' +
         '<button type="button" data-filter="done" aria-pressed="' + (state.filter === "done") + '">Hotovo</button>' +
       "</div>" +
+      '<button class="ghost toggle" type="button" id="sink" aria-pressed="' + state.sinkDone + '">Hotové dolů</button>' +
       '<button class="ghost" type="button" id="reset">Vynulovat hru</button>' +
     "</div>" +
     renderSets(g);
@@ -2107,6 +2150,13 @@ document.addEventListener("click", e => {
     state.pinned = state.pinned === state.gameId ? null : state.gameId;
     persistPin();
     render();
+    return;
+  }
+
+  if (e.target.closest("#sink")) {
+    state.sinkDone = !state.sinkDone;
+    persistPin();
+    renderMain();
     return;
   }
 
