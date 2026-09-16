@@ -228,11 +228,45 @@
     border: 1px solid var(--line-soft);
     padding: 22px 24px;
   }
+  .gh-title {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px 14px;
+    margin-bottom: 6px;
+  }
+  .pin {
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    color: var(--ink-2);
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    padding: 4px 10px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .pin:hover { color: var(--accent); border-color: var(--accent); }
+  .pin[aria-pressed="true"] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-ink);
+  }
+  .pin:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+  .pin-i { width: 11px; height: 11px; flex: none; }
+  .g-name .pin-i { margin-right: 5px; color: var(--accent); vertical-align: -1px; }
+  .rail-head.sep { padding-top: 18px; }
+
   .gamehead h2 {
     font-family: var(--disp);
     font-weight: 700;
     font-size: var(--fs-lg);
-    margin: 0 0 6px;
+    margin: 0;
     line-height: 1.2;
     text-wrap: balance;
   }
@@ -1562,10 +1596,19 @@ for (const g of GAMES) {
   g.hasPlatinum = g.all.some(it => it.grade === "P");
 }
 
+// Release order. Within a year: Unity and Rogue shipped the same day (Unity first),
+// Chronicles China preceded Syndicate, Chronicles India preceded Russia.
+const SERIES_ORDER = [
+  "ac2", "brotherhood", "revelations", "ac3", "blackflag", "unity", "rogue",
+  "chronicles-china", "syndicate", "chronicles-india", "chronicles-russia",
+  "origins", "odyssey", "valhalla", "mirage", "shadows"
+];
+GAMES.sort((a, b) => SERIES_ORDER.indexOf(a.id) - SERIES_ORDER.indexOf(b.id));
+
 const done = {};
 for (const g of GAMES) done[g.id] = new Set();
 
-const state = { gameId: GAMES[0].id, filter: "all", q: "" };
+const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned: null };
 const game = () => GAMES.find(g => g.id === state.gameId);
 
 const countDone = items => items.reduce((n, it) => n + (done[state.gameId].has(it.id) ? 1 : 0), 0);
@@ -1573,6 +1616,8 @@ const doneIn = (g, items) => items.reduce((n, it) => n + (done[g.id].has(it.id) 
 
 // ---- storage ---------------------------------------------------------------
 const LS_KEY = "ac-trophy-log-v1";
+const LS_PIN = "ac-trophy-log-pin-v1";
+let pinTimer, pinChain;
 let db = null;
 const timers = {};
 const chains = {};
@@ -1582,6 +1627,10 @@ function readLocal() {
     const raw = JSON.parse(localStorage.getItem(LS_KEY) || "{}");
     for (const g of GAMES) if (Array.isArray(raw[g.id])) done[g.id] = new Set(raw[g.id]);
   } catch (e) { /* private window, blocked storage — start empty */ }
+  try {
+    const pin = localStorage.getItem(LS_PIN);
+    if (pin && GAMES.some(g => g.id === pin)) state.pinned = pin;
+  } catch (e) { /* same */ }
 }
 function writeLocal() {
   try {
@@ -1596,6 +1645,17 @@ function setSync(kind) {
   if (kind === "cloud") el.innerHTML = "<i>&#9679;</i> Postup se ukládá k tvému účtu — na mobilu uvidíš to samé";
   else if (kind === "local") el.innerHTML = "<i>&#9679;</i> Postup se ukládá jen v tomhle prohlížeči";
   else el.textContent = "Ukládám…";
+}
+
+function persistPin() {
+  try { localStorage.setItem(LS_PIN, state.pinned || ""); } catch (e) { /* blocked storage */ }
+  if (!db) return;
+  clearTimeout(pinTimer);
+  pinTimer = setTimeout(() => {
+    pinChain = (pinChain || Promise.resolve())
+      .then(() => db.doc("settings/main").set({ pinned: state.pinned || "" }))
+      .catch(() => { /* local copy still applies */ });
+  }, 300);
 }
 
 function persist(gameId) {
@@ -1615,6 +1675,17 @@ async function initCloud() {
   try { db = await window.claude?.use?.("db"); } catch (e) { db = null; }
   if (!db) { setSync("local"); return; }
   setSync("cloud");
+  try {
+    db.doc("settings/main").onSnapshot(snap => {
+      if (!snap.exists) { if (state.pinned) persistPin(); return; }
+      const pin = (snap.data() || {}).pinned || null;
+      const valid = pin && GAMES.some(g => g.id === pin) ? pin : null;
+      if (valid === state.pinned) return;
+      state.pinned = valid;
+      try { localStorage.setItem(LS_PIN, valid || ""); } catch (e) { /* blocked */ }
+      render();
+    }, () => { /* pin stays local */ });
+  } catch (e) { /* never break the page over a pin */ }
   for (const g of GAMES) {
     try {
       db.doc("progress/" + g.id).onSnapshot(snap => {
@@ -1645,17 +1716,26 @@ function renderTally() {
     '<div><span class="num">' + doneAll + "/" + totalAll + '</span><span class="cap">Trofejí</span></div>';
 }
 
+const PIN_ICON = '<svg class="pin-i" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">' +
+  '<path d="M9.6 1.2 14.8 6.4l-1.9.5-2.3 2.3.4 3.3-1.3 1.3-3.2-3.2-3.3 3.3-1-1 3.3-3.3L2.3 6.4l1.3-1.3 3.3.4 2.3-2.3z"/></svg>';
+
+function railBtn(g) {
+  const d = doneIn(g, g.platSet.items), t = g.platSet.items.length;
+  const platted = d === t && g.hasPlatinum;
+  return '<button class="gamebtn" type="button" data-game="' + g.id + '" aria-current="' + (g.id === state.gameId) + '">' +
+    '<span class="g-name">' + (g.id === state.pinned ? PIN_ICON : "") +
+      esc(g.title.replace("Assassin's Creed ", "")) + "</span>" +
+    '<span class="bar' + (platted ? " is-plat" : "") + '"><i style="width:' + pct(d, t) + '%"></i></span>' +
+    '<span class="g-meta"><span>' + g.year + "</span><span>" + (platted ? "Platina" : d + "/" + t) + "</span></span>" +
+    "</button>";
+}
+
 function renderRail() {
-  let h = '<p class="rail-head">Hry</p>';
-  for (const g of GAMES) {
-    const d = doneIn(g, g.platSet.items), t = g.platSet.items.length;
-    const platted = d === t && g.hasPlatinum;
-    h += '<button class="gamebtn" type="button" data-game="' + g.id + '" aria-current="' + (g.id === state.gameId) + '">' +
-      '<span class="g-name">' + esc(g.title.replace("Assassin's Creed ", "")) + "</span>" +
-      '<span class="bar' + (platted ? " is-plat" : "") + '"><i style="width:' + pct(d, t) + '%"></i></span>' +
-      '<span class="g-meta"><span>' + g.year + "</span><span>" + (platted ? "Platina" : d + "/" + t) + "</span></span>" +
-      "</button>";
-  }
+  const pinned = GAMES.find(g => g.id === state.pinned);
+  let h = "";
+  if (pinned) h += '<p class="rail-head">Právě hraju</p>' + railBtn(pinned);
+  h += '<p class="rail-head' + (pinned ? " sep" : "") + '">' + (pinned ? "Ostatní hry" : "Hry") + "</p>";
+  for (const g of GAMES) if (g.id !== state.pinned) h += railBtn(g);
   document.getElementById("rail").innerHTML = h;
 }
 
@@ -1682,7 +1762,9 @@ function renderGameHead(g) {
   }
   return '<section class="gamehead">' +
     '<div class="gh-text">' +
-      "<h2>" + esc(g.title) + "</h2>" +
+      '<div class="gh-title"><h2>' + esc(g.title) + "</h2>" +
+        '<button class="pin" type="button" id="pin" aria-pressed="' + (state.pinned === g.id) + '">' +
+          PIN_ICON + (state.pinned === g.id ? "Připnuto" : "Připnout") + "</button></div>" +
       '<p class="sub">' + g.year + " &middot; " + esc(g.plat) + " &middot; " + at + " trofejí" + (g.hasDlc ? " včetně DLC" : "") + "</p>" +
       '<p class="gh-note">' + esc(g.note) + "</p>" +
     "</div>" +
@@ -1765,6 +1847,13 @@ document.addEventListener("click", e => {
     return;
   }
 
+  if (e.target.closest("#pin")) {
+    state.pinned = state.pinned === state.gameId ? null : state.gameId;
+    persistPin();
+    render();
+    return;
+  }
+
   const fb = e.target.closest("[data-filter]");
   if (fb) { state.filter = fb.dataset.filter; render(); return; }
 
@@ -1800,9 +1889,12 @@ document.addEventListener("input", e => {
 
 
 // ---- transfer: sync link, backup file ---------------------------------------
-const SYNC_V = 2;  // bumped when the trophy list grew from 303 to 782 — v1 links no longer decode
+// v2 grew the list from 303 to 782 trophies; v3 pinned the sync order to game id
+// instead of display order, so reordering the rail can never invalidate a link again.
+const SYNC_V = 3;
 const FLAT = [];
-for (const g of GAMES) for (const it of g.all) FLAT.push([g.id, it.id]);
+const SYNC_GAMES = [...GAMES].sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+for (const g of SYNC_GAMES) for (const it of g.all) FLAT.push([g.id, it.id]);
 const BYTES = Math.ceil(FLAT.length / 8);
 const IN_CLAUDE = !!window.claude;
 
@@ -1955,6 +2047,7 @@ document.getElementById("tf-intro").textContent = IN_CLAUDE
 
 // ---- boot ------------------------------------------------------------------
 readLocal();
+if (state.pinned) state.gameId = state.pinned;
 render();
 readSyncLink();
 initCloud();
