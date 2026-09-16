@@ -29,6 +29,10 @@ Odškrtávací seznam trofejí z Assassin's Creed na PS5. Jedna HTML stránka, �
 Kromě tří posledních dílů jsou to verze pro PS4, které na PS5 běží přes zpětnou kompatibilitu.
 Assassin's Creed z roku 2007 v seznamu není — vyšel před zavedením trofejí a žádné nemá.
 
+Hry jsou seřazené chronologicky od nejstaršího dílu. Jednu hru si můžeš připnout tlačítkem
+**Připnout** v její hlavičce — vyskočí nad ostatní do sekce „Právě hraju“ a stránka se na ní
+příště rovnou otevře. Připnutí se drží stejně jako postup, takže platí i na druhém zařízení.
+
 Prstenec u každé hry počítá postup **k platině**, ne ke 100 %. U žádné z těch her se DLC do platiny nepočítá — u Valhally je to rozdíl 87 proti 51. DLC sekce jsou v seznamu označené zvlášť.
 
 Názvy a popisy jsou přeložené do češtiny. Je to vlastní překlad — Ubisoft trofeje do češtiny
@@ -62,7 +66,10 @@ Postup se drží v `localStorage`, takže žije v tom prohlížeči, kde odškrt
 
 Nic se nikam neposílá, žádný server, žádný účet.
 
-Sync odkaz je svázaný s pořadím trofejí v seznamu. Když přibudou chybějící DLC, `SYNC_V` v `index.html` se zvedne a starší odkazy přestanou platit — stránka to pozná a řekne ti to místo toho, aby načetla nesmysl. Zálohy do souboru drží ID trofejí, takže těm to nevadí.
+Sync odkaz je svázaný s počtem trofejí. Bity se řadí podle `id` hry, ne podle toho, jak jsou hry
+zobrazené, takže přeskládání seznamu odkazy nerozbije — ale až přibudou chybějící DLC, `SYNC_V`
+v `index.html` se zvedne a starší odkazy přestanou platit. Stránka to pozná a řekne ti to místo
+toho, aby načetla nesmysl. Zálohy do souboru drží ID trofejí, takže těm to nevadí.
 
 ## Spuštění lokálně
 
