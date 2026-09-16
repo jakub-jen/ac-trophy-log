@@ -50,6 +50,9 @@ stačí split-screen na jedné konzoli. F1 25 nic takového nemá.
 Kromě tří posledních dílů jsou to verze pro PS4, které na PS5 běží přes zpětnou kompatibilitu.
 Assassin's Creed z roku 2007 v seznamu není — vyšel před zavedením trofejí a žádné nemá.
 
+Kliknutím na počet platin v hlavičce se rozbalí přehled: které hry už platinu mají a které
+zbývají, seřazené podle toho, jak blízko k ní jsi. Kliknutí na řádek tu hru rovnou otevře.
+
 Sérii jde v seznamu sbalit kliknutím na její název — hlavička si i zabalená drží souhrn
 odškrtaných trofejí za celou sérii. Na mobilu, kde je seznam vodorovný pruh bez hlaviček,
 se sbalení ignoruje.

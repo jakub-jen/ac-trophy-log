@@ -150,6 +150,107 @@
     color: var(--ink-3);
   }
 
+  .tally-btn {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    font-family: inherit;
+    color: inherit;
+    text-align: right;
+    cursor: pointer;
+    border-bottom: 1px dashed var(--line);
+  }
+  .tally-btn:hover { color: var(--accent); border-bottom-color: var(--accent); }
+  .tally-btn[aria-expanded="true"] { color: var(--accent); border-bottom-color: var(--accent); }
+  .tally-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* ---------- platinum overview ---------- */
+  .platpanel {
+    margin-top: 18px;
+    padding: 18px 20px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--plat-b);
+  }
+  .pp-head { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; }
+  .pp-head h4 {
+    font-family: var(--disp);
+    font-size: var(--fs-md);
+    font-weight: 600;
+    margin: 0;
+  }
+  .pp-sub { font-family: var(--cond); font-size: var(--fs-sm); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .pp-close {
+    appearance: none;
+    margin-left: auto;
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    color: var(--ink-2);
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    padding: 3px 10px;
+    cursor: pointer;
+  }
+  .pp-close:hover { color: var(--accent); border-color: var(--accent); }
+
+  .pp-group {
+    font-family: var(--cond);
+    font-size: var(--fs-xs);
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin: 0 0 6px;
+  }
+  .pp-group.sep { margin-top: 18px; }
+  .pp-empty, .pp-note { margin: 0; font-size: var(--fs-sm); color: var(--ink-3); }
+  .pp-note { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line-soft); }
+  .pp-list { display: grid; }
+
+  .pp-row {
+    appearance: none;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line-soft);
+    width: 100%;
+    display: grid;
+    grid-template-columns: 14px minmax(0, 1fr) 84px auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 4px;
+    font-family: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+  }
+  .pp-row:last-child { border-bottom: 0; }
+  .pp-row:hover { background: var(--surface-2); }
+  .pp-row:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .pp-pip { display: block; }
+  /* grid blockifies .pp-bar, but the .bar inside it is still an inline span */
+  .pp-bar, .pp-bar .bar { display: block; }
+  .pp-row:not(.is-got) .pp-pip .pip { filter: saturate(.15); opacity: .4; }
+  .pp-name { font-size: var(--fs-sm); font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .pp-num {
+    font-family: var(--cond);
+    font-size: var(--fs-sm);
+    font-weight: 600;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .pp-row.is-got .pp-num { color: var(--plat-b); }
+  .pp-row.is-got .pp-name { font-weight: 600; }
+
+  @media (max-width: 560px) {
+    .pp-row { grid-template-columns: 14px minmax(0, 1fr) auto; }
+    .pp-bar { display: none; }
+  }
+
   /* ---------- layout ---------- */
   .layout {
     display: grid;
@@ -746,6 +847,7 @@
   </header>
 
   <div class="banner" id="banner" hidden></div>
+  <div id="platpanel"></div>
 
   <div class="layout">
     <nav class="rail" id="rail" aria-label="Hry"></nav>
@@ -1926,6 +2028,7 @@ for (const g of GAMES) done[g.id] = new Set();
 
 const state = { gameId: GAMES[GAMES.length - 1].id, filter: "all", q: "", pinned: null, sinkDone: true };
 const collapsed = new Set();     // series folded shut in the rail
+let platPanelOpen = false;
 const openRows = new Set();      // trophy ids expanded right now
 const aiAnswers = new Map();     // "gameId/trophyId" -> answer, kept across re-renders
 const aiBusy = new Set();
@@ -2115,8 +2218,53 @@ function renderTally() {
   const platGames = GAMES.filter(g => g.hasPlatinum);
   const plats = platGames.filter(g => doneIn(g, g.platSet.items) === g.platSet.items.length).length;
   document.getElementById("tally").innerHTML =
-    '<div><span class="num">' + plats + "/" + platGames.length + '</span><span class="cap">Platin</span></div>' +
+    '<button class="tally-btn" type="button" id="platbtn" aria-expanded="' + platPanelOpen + '" aria-controls="platpanel">' +
+      '<span class="num">' + plats + "/" + platGames.length + '</span><span class="cap">Platin</span></button>' +
     '<div><span class="num">' + doneAll + "/" + totalAll + '</span><span class="cap">Trofejí</span></div>';
+  renderPlatPanel();
+}
+
+function renderPlatPanel() {
+  const el = document.getElementById("platpanel");
+  if (!platPanelOpen) { el.innerHTML = ""; el.hidden = true; return; }
+  el.hidden = false;
+
+  const eligible = GAMES.filter(g => g.hasPlatinum);
+  const rows = eligible.map(g => {
+    const d = doneIn(g, g.platSet.items), t = g.platSet.items.length;
+    return { g, d, t, p: pct(d, t), got: d === t };
+  });
+  const got = rows.filter(r => r.got);
+  // Closest to done first — that is the useful order for what to play next.
+  const left = rows.filter(r => !r.got).sort((a, b) => b.p - a.p || a.g.title.localeCompare(b.g.title));
+
+  const row = r =>
+    '<button class="pp-row' + (r.got ? " is-got" : "") + '" type="button" data-game="' + r.g.id + '">' +
+      '<span class="pp-pip"><span class="pip p"></span></span>' +
+      '<span class="pp-name">' + esc(r.g.title) + "</span>" +
+      '<span class="pp-bar"><span class="bar is-plat"><i style="width:' + r.p + '%"></i></span></span>' +
+      '<span class="pp-num">' + (r.got ? "Platina" : r.d + "/" + r.t + " · " + r.p + " %") + "</span>" +
+    "</button>";
+
+  let h = '<section class="platpanel">';
+  h += '<div class="pp-head"><h4>Platiny</h4>' +
+       '<span class="pp-sub">' + got.length + " z " + eligible.length + " her</span>" +
+       '<button class="pp-close" type="button" id="platclose">Zavřít</button></div>';
+
+  if (got.length) {
+    h += '<p class="pp-group">Máš</p><div class="pp-list">' + got.map(row).join("") + "</div>";
+  } else {
+    h += '<p class="pp-empty">Zatím žádná. Nejblíž máš k těm nahoře.</p>';
+  }
+  if (left.length) {
+    h += '<p class="pp-group sep">Zbývá</p><div class="pp-list">' + left.map(row).join("") + "</div>";
+  }
+
+  const noPlat = GAMES.length - eligible.length;
+  if (noPlat) {
+    h += '<p class="pp-note">Zbylé ' + noPlat + " hry platinu vůbec nemají, proto se do počtu nezapočítávají.</p>";
+  }
+  el.innerHTML = h + "</section>";
 }
 
 const PIN_ICON = '<svg class="pin-i" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor">' +
@@ -2356,6 +2504,29 @@ async function askClaude(it) {
 
 // ---- events ----------------------------------------------------------------
 document.addEventListener("click", e => {
+  if (e.target.closest("#platbtn")) {
+    platPanelOpen = !platPanelOpen;
+    renderTally();
+    return;
+  }
+  if (e.target.closest("#platclose")) {
+    platPanelOpen = false;
+    renderTally();
+    return;
+  }
+
+  const pr = e.target.closest(".pp-row");
+  if (pr) {
+    state.gameId = pr.dataset.game;
+    state.q = "";
+    openRows.clear();
+    platPanelOpen = false;
+    watchAnswers(state.gameId);
+    render();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    return;
+  }
+
   const gb = e.target.closest(".gamebtn");
   if (gb) { state.gameId = gb.dataset.game; state.q = ""; openRows.clear(); watchAnswers(state.gameId); render(); window.scrollTo({ top: 0, behavior: "smooth" }); return; }
 
