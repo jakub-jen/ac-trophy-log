@@ -2,7 +2,7 @@
 
 Odškrtávací seznam trofejí na PS5. Jedna HTML stránka, žádný build, žádné závislosti.
 
-Hry jsou seskupené podle série. Zatím je tu jedna — Assassin's Creed — a další přibývají
+Hry jsou seskupené podle série. Zatím jsou tu dvě — Assassin's Creed a F1 — a další přibývají
 na vyžádání: seznamy se dohledávají ručně ze dvou zdrojů a doplňují se české názvy, popisy
 a tipy. Automatický import z PSN by šel, ale potřeboval by vlastní server a NPSSO token,
 a hlavně by přinesl hry bez té české vrstvy, kvůli které to celé má smysl.
@@ -31,6 +31,22 @@ a hlavně by přinesl hry bez té české vrstvy, kvůli které to celé má smy
 | AC Chronicles: Russia | 2016 | 17 | bez platiny |
 | **Celkem** | | **782** | **13 platin** |
 
+## F1
+
+| Hra | Rok | Trofejí | Na platinu |
+|---|---:|---:|---:|
+| F1 23 | 2023 | 50 | 50 |
+| F1 24 | 2024 | 51 | 51 |
+| F1 25 | 2025 | 47 | 47 |
+| **Celkem** | | **148** | **3 platiny** |
+
+Seznamy podle VGTimes. EA v roce 2026 roční díl vynechala — **F1 26 neexistuje**, místo něj
+vyšel 3. června 2026 placený 2026 Season Pack do F1 25 a ten žádné nové trofeje nepřidává.
+Další plná hra má přijít až v roce 2027.
+
+U F1 23 a F1 24 vyžadují dvě resp. jedna trofej druhého hráče ve Two Player Career —
+stačí split-screen na jedné konzoli. F1 25 nic takového nemá.
+
 Kromě tří posledních dílů jsou to verze pro PS4, které na PS5 běží přes zpětnou kompatibilitu.
 Assassin's Creed z roku 2007 v seznamu není — vyšel před zavedením trofejí a žádné nemá.
 
@@ -50,8 +66,8 @@ Prstenec u každé hry počítá postup **k platině**, ne ke 100 %. U žádné 
 
 Názvy a popisy jsou přeložené do češtiny. Je to vlastní překlad — Ubisoft trofeje do češtiny
 nelokalizuje, takže na PSN je uvidíš anglicky. Originální název proto zůstává pod tím českým:
-to je to, co hledáš v guidech a na YouTube. Kliknutím na trofej se rozbalí panel s tipem, co je pro ni potřeba udělat — takový tip má 255
-z 782 trofejí. Odškrtává se zvlášť, čtverečkem vlevo, takže čtení tipu nic needškrtne.
+to je to, co hledáš v guidech a na YouTube. Kliknutím na trofej se rozbalí panel s tipem, co je pro ni potřeba udělat — takový tip má 306
+z 930 trofejí. Odškrtává se zvlášť, čtverečkem vlevo, takže čtení tipu nic needškrtne.
 Trofeje, které jdou nenávratně minout, mají u názvu červený štítek **missable**.
 
 Ve verzi na claude.ai je v tom panelu navíc tlačítko **Zeptat se Claudea**, které se doptá
@@ -81,7 +97,7 @@ takže tamní platiny jsou bezpečné, na rozdíl od původních PS3 verzí.
 
 Postup se drží v `localStorage`, takže žije v tom prohlížeči, kde odškrtáváš. Na přenos jinam jsou dvě cesty:
 
-- **Sync odkaz** — zabalí celý postup do URL. 782 trofejí je bitová mapa o 98 bajtech, po zakódování 132 znaků. Pošleš si odkaz na mobil, otevřeš, postup naskočí. Pokud už na druhém zařízení něco odškrtnutého máš, stránka se nejdřív zeptá, než to přepíše.
+- **Sync odkaz** — zabalí celý postup do URL. 930 trofejí je bitová mapa o 117 bajtech, po zakódování 158 znaků. Pošleš si odkaz na mobil, otevřeš, postup naskočí. Pokud už na druhém zařízení něco odškrtnutého máš, stránka se nejdřív zeptá, než to přepíše.
 - **Záloha do souboru** — JSON ke stažení a načtení zpátky. Nese i uložené odpovědi
   a připnutou hru, na rozdíl od sync odkazu, do kterého se vejdou jen odškrtané trofeje.
 
