@@ -17,7 +17,10 @@ Odškrtávací seznam trofejí z Assassin's Creed na PS5. Jedna HTML stránka, �
 
 Prstenec u každé hry počítá postup **k platině**, ne ke 100 %. U žádné z těch her se DLC do platiny nepočítá — u Valhally je to rozdíl 87 proti 51. DLC sekce jsou v seznamu označené zvlášť.
 
-Názvy a popisy trofejí jsou v originále, tak jak je najdeš na PSN a v guidech.
+Názvy a popisy jsou přeložené do češtiny. Je to vlastní překlad — Ubisoft trofeje do češtiny
+nelokalizuje, takže na PSN je uvidíš anglicky. Originální název proto zůstává pod tím českým:
+to je to, co hledáš v guidech a na YouTube. U 144 trofejí je navíc tip, co je pro ni potřeba
+udělat; trofeje, které jdou nenávratně minout, jsou označené červeně.
 
 ### Zatím chybí
 
@@ -42,6 +45,9 @@ Stačí otevřít `index.html` v prohlížeči. Žádný server není potřeba.
 
 ## Úpravy
 
-Všechno je v `index.html`. Seznamy trofejí jsou nahoře ve skriptu v poli `GAMES`, jedna trofej je `[stupeň, název, popis]`, kde stupeň je `P`/`G`/`S`/`B`. Nové sady přidávej na konec hry, ať nerozhodíš pořadí pro sync odkazy.
+Všechno je v `index.html`. Seznamy trofejí jsou ve skriptu v poli `GAMES`, jedna trofej je `[stupeň, název, popis]`, kde stupeň
+je `P`/`G`/`S`/`B` — to je doslovný přepis oficiálního seznamu, tak ať zůstane. Čeština je vedle
+v tabulce `CS`, klíčem je anglický název a hodnotou `[český název, český popis, tip]`. Když název
+v `CS` chybí, stránka spadne zpátky na originál. Nové sady přidávej na konec hry, ať nerozhodíš pořadí pro sync odkazy.
 
 Data podle [PowerPyx](https://www.powerpyx.com/), u Shadows ověřená proti [Fextralife](https://assassinscreedshadows.wiki.fextralife.com/Trophy+and+Achievement+Guide).
